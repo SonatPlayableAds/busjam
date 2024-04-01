@@ -1,0 +1,83 @@
+{
+  "ver": "2.3.0",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "6b98f659-0cec-4a31-8334-549453a9a043",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "18d6f": {
+      "importer": "gltf-animation",
+      "uuid": "6b98f659-0cec-4a31-8334-549453a9a043@18d6f",
+      "displayName": "",
+      "id": "18d6f",
+      "name": "mixamo.com.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 0,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.9000000953674316
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "361f6": {
+      "importer": "gltf-scene",
+      "uuid": "6b98f659-0cec-4a31-8334-549453a9a043@361f6",
+      "displayName": "",
+      "id": "361f6",
+      "name": "Cheering.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "legacyFbxImporter": false,
+    "allowMeshDataAccess": true,
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 2.9000000953674316,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "mixamo.com",
+            "from": 0,
+            "to": 2.9000000953674316,
+            "wrapMode": 0
+          }
+        ]
+      }
+    ],
+    "redirect": "6b98f659-0cec-4a31-8334-549453a9a043@361f6",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "6b98f659-0cec-4a31-8334-549453a9a043@361f6"
+      ]
+    }
+  }
+}

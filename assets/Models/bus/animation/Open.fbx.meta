@@ -1,0 +1,139 @@
+{
+  "ver": "2.3.0",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "83194": {
+      "importer": "gltf-mesh",
+      "uuid": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@83194",
+      "displayName": "",
+      "id": "83194",
+      "name": "Car.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f2ca5": {
+      "importer": "gltf-animation",
+      "uuid": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@f2ca5",
+      "displayName": "",
+      "id": "f2ca5",
+      "name": "Open.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 1,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 0.4583333432674408
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "438fe": {
+      "importer": "gltf-skeleton",
+      "uuid": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@438fe",
+      "displayName": "",
+      "id": "438fe",
+      "name": "UnnamedSkeleton.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 9
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "7a3ca": {
+      "importer": "gltf-material",
+      "uuid": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@7a3ca",
+      "displayName": "",
+      "id": "7a3ca",
+      "name": "lambert2.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "84b3a": {
+      "importer": "gltf-scene",
+      "uuid": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@84b3a",
+      "displayName": "",
+      "id": "84b3a",
+      "name": "Open.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "legacyFbxImporter": false,
+    "allowMeshDataAccess": true,
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "Open",
+        "duration": 0.4583333432674408,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Open",
+            "from": 0,
+            "to": 0.4583333432674408,
+            "wrapMode": 1
+          }
+        ]
+      }
+    ],
+    "redirect": "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@84b3a",
+    "assetFinder": {
+      "meshes": [
+        "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@83194"
+      ],
+      "skeletons": [
+        "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@438fe"
+      ],
+      "textures": [],
+      "materials": [
+        "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@7a3ca"
+      ],
+      "scenes": [
+        "5585df13-b22b-4c1a-8a33-0dbbdab2b68d@84b3a"
+      ]
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "ver": "2.3.0",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "cd92d185-eb72-4898-befa-b6dbcc644721",
+  "files": [],
+  "subMetas": {
+    "cfaaa": {
+      "importer": "gltf-mesh",
+      "uuid": "cd92d185-eb72-4898-befa-b6dbcc644721@cfaaa",
+      "displayName": "",
+      "id": "cfaaa",
+      "name": "moutain.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "dfe29": {
+      "importer": "gltf-embeded-image",
+      "uuid": "cd92d185-eb72-4898-befa-b6dbcc644721@dfe29",
+      "displayName": "",
+      "id": "dfe29",
+      "name": "file3.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".json",
+        ".png"
+      ],
+      "subMetas": {}
+    },
+    "a562b": {
+      "importer": "texture",
+      "uuid": "cd92d185-eb72-4898-befa-b6dbcc644721@a562b",
+      "displayName": "",
+      "id": "a562b",
+      "name": "file3.texture",
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "cd92d185-eb72-4898-befa-b6dbcc644721@dfe29"
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "8d883": {
+      "importer": "gltf-material",
+      "uuid": "cd92d185-eb72-4898-befa-b6dbcc644721@8d883",
+      "displayName": "",
+      "id": "8d883",
+      "name": "lambert1.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "d65f3": {
+      "importer": "gltf-scene",
+      "uuid": "cd92d185-eb72-4898-befa-b6dbcc644721@d65f3",
+      "displayName": "",
+      "id": "d65f3",
+      "name": "mountain.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [
+      {
+        "name": "file3",
+        "uri": "cd92d185-eb72-4898-befa-b6dbcc644721@dfe29"
+      }
+    ],
+    "legacyFbxImporter": false,
+    "allowMeshDataAccess": true,
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "redirect": "cd92d185-eb72-4898-befa-b6dbcc644721@d65f3",
+    "assetFinder": {
+      "meshes": [
+        "cd92d185-eb72-4898-befa-b6dbcc644721@cfaaa"
+      ],
+      "skeletons": [],
+      "textures": [
+        "cd92d185-eb72-4898-befa-b6dbcc644721@a562b"
+      ],
+      "materials": [
+        "cd92d185-eb72-4898-befa-b6dbcc644721@8d883"
+      ],
+      "scenes": [
+        "cd92d185-eb72-4898-befa-b6dbcc644721@d65f3"
+      ]
+    },
+    "materials": {
+      "cd92d185-eb72-4898-befa-b6dbcc644721@8d883": {
+        "__type__": "cc.Material",
+        "_name": "",
+        "_objFlags": 0,
+        "_native": "",
+        "_effectAsset": {
+          "__uuid__": "f648964e-8d32-41fc-9ac9-7a1e714dd17b",
+          "__expectedType__": "cc.EffectAsset"
+        },
+        "_techIdx": 0,
+        "_defines": [
+          {
+            "DCC_APP_NAME": 1,
+            "USE_ALBEDO_MAP": true
+          },
+          {},
+          {}
+        ],
+        "_states": [
+          {
+            "rasterizerState": {},
+            "depthStencilState": {},
+            "blendState": {
+              "targets": [
+                {}
+              ]
+            }
+          },
+          {
+            "rasterizerState": {},
+            "depthStencilState": {},
+            "blendState": {
+              "targets": [
+                {}
+              ]
+            }
+          },
+          {
+            "rasterizerState": {},
+            "depthStencilState": {},
+            "blendState": {
+              "targets": [
+                {}
+              ]
+            }
+          }
+        ],
+        "_props": [
+          {
+            "mainTexture": {
+              "__uuid__": "940e402c-5a4e-4e94-b1dc-30f5591b9648@6c48a",
+              "__expectedType__": "cc.Texture2D"
+            },
+            "albedoScale": 0.800000011920929,
+            "transparencyFactor": 0
+          },
+          {},
+          {}
+        ]
+      }
+    }
+  }
+}

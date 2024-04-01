@@ -1,0 +1,83 @@
+{
+  "ver": "2.3.0",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "ba26f5f7-b85c-4043-afd3-74b7d45b4695",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "18d6f": {
+      "importer": "gltf-animation",
+      "uuid": "ba26f5f7-b85c-4043-afd3-74b7d45b4695@18d6f",
+      "displayName": "",
+      "id": "18d6f",
+      "name": "mixamo.com.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.133333444595337
+        },
+        "events": []
+      },
+      "ver": "1.0.16",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {}
+    },
+    "cbc9c": {
+      "importer": "gltf-scene",
+      "uuid": "ba26f5f7-b85c-4043-afd3-74b7d45b4695@cbc9c",
+      "displayName": "",
+      "id": "cbc9c",
+      "name": "Sitting Idle.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "legacyFbxImporter": false,
+    "allowMeshDataAccess": true,
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "animationImportSettings": [
+      {
+        "name": "mixamo.com",
+        "duration": 2.133333444595337,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "mixamo.com",
+            "from": 0,
+            "to": 2.133333444595337,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ],
+    "redirect": "ba26f5f7-b85c-4043-afd3-74b7d45b4695@cbc9c",
+    "assetFinder": {
+      "meshes": [],
+      "skeletons": [],
+      "textures": [],
+      "materials": [],
+      "scenes": [
+        "ba26f5f7-b85c-4043-afd3-74b7d45b4695@cbc9c"
+      ]
+    }
+  }
+}
