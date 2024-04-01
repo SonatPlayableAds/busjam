@@ -11,6 +11,7 @@ import {
 } from "cc";
 import { BusController } from "./BusController";
 import { PLAYER_COLOR } from "./helper/Constants";
+import { GameController } from "./GameController";
 const { ccclass, property } = _decorator;
 
 const BUS_DISTANCE = 6.3;
@@ -28,14 +29,22 @@ export class BusGroupController extends Component {
   start() {}
 
   update(deltaTime: number) {
+    if (this.buses.length === 0) return;
+
     const canRun = this._currentBus
       .getComponent(BusController)
       .checkRunCondition();
+
     if (canRun) {
       this._currentBus.getComponent(BusController).runAway();
       this.buses.shift();
       this._currentBus = this.buses[0];
-      this.shiftBuses();
+
+      const gameController = this.node.parent
+        .getChildByName("GameController")
+        .getComponent(GameController);
+
+      this.shiftBuses(gameController);
     }
   }
 
@@ -62,16 +71,24 @@ export class BusGroupController extends Component {
   }
 
   onStickmanEnterBus(stickman: Node) {
-    const canRunAway = this._currentBus
-      .getComponent(BusController)
-      .onStickmanEnter(stickman);
+    this._currentBus.getComponent(BusController).onStickmanEnter(stickman);
   }
 
-  shiftBuses() {
+  shiftBuses(gameController: GameController) {
     this.buses.forEach((bus, index) => {
-      tween(bus)
-        .to(0.8, { position: new Vec3(-index * BUS_DISTANCE, 0, 0) })
-        .start();
+      const busTween = tween(bus)
+        .delay(0.5)
+        .to(0.8, { position: new Vec3(-index * BUS_DISTANCE, 0, 0) });
+
+      if (index === this.buses.length - 1) {
+        busTween.call(() => {
+          gameController.newBusArrived(
+            this._currentBus.getComponent(BusController).busColor
+          );
+        });
+      }
+
+      busTween.start();
     });
   }
 }

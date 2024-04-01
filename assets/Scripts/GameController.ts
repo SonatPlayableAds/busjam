@@ -19,6 +19,7 @@ import { AudioController } from "./AudioController";
 import { BusGroupController } from "./BusGroupController";
 import { NODE_NAME } from "./helper/Constants";
 import { UIController } from "./UIController";
+import { StickmanController } from "./StickmanController";
 const { ccclass, property } = _decorator;
 
 @ccclass("GameController")
@@ -143,6 +144,28 @@ export class GameController extends Component {
 
   activePointOfMap(x: number, y: number) {
     this._activatedMap[y][x] = 0;
+  }
+
+  newBusArrived(busColor: string) {
+    console.log("new bus arrived", busColor);
+
+    const onQueueStickman = [];
+    for (let i = 0; i < this._queueStickman.length; i++) {
+      const stickman = this._queueStickman[i];
+      if (
+        stickman.getComponent(StickmanController).stickmanColor === busColor
+      ) {
+        onQueueStickman.push(stickman);
+        if (onQueueStickman.length === 3) {
+          break;
+        }
+      }
+    }
+
+    onQueueStickman.forEach((stickman) => {
+      const stickmanController = stickman.getComponent(StickmanController);
+      stickmanController.fromQueueToBus(this.busGroup);
+    });
   }
 
   gameOver(isWin: boolean) {

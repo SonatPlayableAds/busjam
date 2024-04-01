@@ -203,6 +203,35 @@ export class StickmanController extends Component {
     movesTween.union().start();
   }
 
+  fromQueueToBus(busGroupController: BusGroupController) {
+    console.log("from queue to bus");
+    const busDestination = new Vec3(0, 0, 4.75);
+    this._animationController.setValue("Running", true);
+    const fromQueueToBusTween = tween(this.node)
+      .to(
+        0.5,
+        {
+          worldPosition: busDestination,
+        },
+        { easing: "sineIn" }
+      )
+      .to(
+        0.2,
+        { scale: new Vec3(0.036, 0.036, 0.036) },
+        {
+          easing: "sineIn",
+          onComplete: () => {
+            this._animationController.setValue("Running", false);
+          },
+        }
+      )
+      .call(() => {
+        busGroupController.onStickmanEnterBus(this.node);
+      })
+      .union()
+      .start();
+  }
+
   runToBus(busGroupCtl: BusGroupController) {
     const busDestination = new Vec3(0, 0, 4.75);
     // const runningTrigger = this._animationController.getValue("Running");

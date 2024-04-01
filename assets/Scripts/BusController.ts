@@ -63,20 +63,18 @@ export class BusController extends Component {
       .setValue("SittingIdle", true);
     stickman.setPosition(BUS_SEAT[this._stickmansOnBus.length]);
     stickman.setRotationFromEuler(new Vec3(0, 90, 0));
+    this._stickmansOnBus.push(stickman);
 
     tween(stickman)
       .to(0.3, { scale: new Vec3(0.036, 0.036, 0.036) })
-      .delay(0.5)
       .union()
-      .call(() => {
-        this._stickmansOnBus.push(stickman);
-      })
       .start();
   }
 
   runAway() {
     const destination = new Vec3(27, 0, 0);
     tween(this.node)
+      .delay(0.5)
       .to(2.5, { position: destination })
       .call(() => {
         this.node.destroy();
