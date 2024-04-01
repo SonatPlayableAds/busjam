@@ -6,6 +6,7 @@ import {
   Node,
   Prefab,
   Texture2D,
+  tween,
   Vec3,
 } from "cc";
 import { BusController } from "./BusController";
@@ -30,6 +31,12 @@ export class BusGroupController extends Component {
     const canRun = this._currentBus
       .getComponent(BusController)
       .checkRunCondition();
+    if (canRun) {
+      this._currentBus.getComponent(BusController).runAway();
+      this.buses.shift();
+      this._currentBus = this.buses[0];
+      this.shiftBuses();
+    }
   }
 
   spawnBuses(buses: number[], busMaterials: Material[]) {
@@ -58,5 +65,13 @@ export class BusGroupController extends Component {
     const canRunAway = this._currentBus
       .getComponent(BusController)
       .onStickmanEnter(stickman);
+  }
+
+  shiftBuses() {
+    this.buses.forEach((bus, index) => {
+      tween(bus)
+        .to(0.8, { position: new Vec3(-index * BUS_DISTANCE, 0, 0) })
+        .start();
+    });
   }
 }

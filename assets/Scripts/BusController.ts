@@ -66,6 +66,8 @@ export class BusController extends Component {
 
     tween(stickman)
       .to(0.3, { scale: new Vec3(0.036, 0.036, 0.036) })
+      .delay(0.5)
+      .union()
       .call(() => {
         this._stickmansOnBus.push(stickman);
       })
@@ -75,10 +77,14 @@ export class BusController extends Component {
   runAway() {
     const destination = new Vec3(27, 0, 0);
     tween(this.node)
-      .to(2, { position: destination })
+      .to(2.5, { position: destination })
       .call(() => {
         this.node.destroy();
       })
       .start();
+  }
+
+  checkRunCondition() {
+    return this._stickmansOnBus.length === 3;
   }
 }
