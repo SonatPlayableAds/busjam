@@ -89,14 +89,15 @@ export class StickmanGroupController extends Component {
     activatedMap: number[][],
     audioController: AudioController,
     currentBusColor: string,
+    availableSlotIndex: number,
     availableSlot: Node
-  ): Node | null {
+  ): { toQueueStickman: Node | null; rightMove: boolean } {
     const stickmanController = stickman.getComponent(StickmanController);
     const shortestPath = stickmanController.findShortestPath(activatedMap);
 
     if (shortestPath === undefined || shortestPath.length === 0) {
       // audioController.playAudio("error");
-      return;
+      return { toQueueStickman: null, rightMove: false };
     }
 
     // active the stickman point
@@ -104,28 +105,28 @@ export class StickmanGroupController extends Component {
       stickmanController.matrixPos.x
     ] = 0;
 
-    stickmanController.runAlongPath(
-      shortestPath,
-      this._toOriginVector,
-      currentBusColor === stickmanController.stickmanColor,
-      this.busGroupController,
-      availableSlot
-    );
-
     if (shortestPath.length === 1) {
       if (currentBusColor === stickmanController.stickmanColor) {
         stickmanController.runToBus(this.busGroupController);
-        return null;
+        return { toQueueStickman: null, rightMove: true };
       } else {
-        stickmanController.runToSlot(availableSlot);
-        return stickman;
+        stickmanController.runToSlot(availableSlot, availableSlotIndex);
+        return { toQueueStickman: stickman, rightMove: true };
       }
     } else {
+      stickmanController.runAlongPath(
+        shortestPath,
+        this._toOriginVector,
+        currentBusColor === stickmanController.stickmanColor,
+        this.busGroupController,
+        availableSlotIndex,
+        availableSlot
+      );
+
       if (currentBusColor === stickmanController.stickmanColor) {
-        return null;
+        return { toQueueStickman: null, rightMove: true };
       } else {
-        // stickmanController.runToSlot(availableSlot);
-        return stickman;
+        return { toQueueStickman: stickman, rightMove: true };
       }
     }
   }

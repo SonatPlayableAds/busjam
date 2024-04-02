@@ -12,17 +12,23 @@ import {
 import { BusController } from "./BusController";
 import { PLAYER_COLOR } from "./helper/Constants";
 import { GameController } from "./GameController";
+import { AudioController } from "./AudioController";
 const { ccclass, property } = _decorator;
 
 const BUS_DISTANCE = 6.3;
 
 @ccclass("BusGroupController")
 export class BusGroupController extends Component {
+  @property(AudioController)
+  public audioController: AudioController = null!;
+
   @property(Prefab)
   public busPrefab: Prefab = null!;
 
   @property([Node])
   public buses: Node[] = [];
+
+  public movingBus: boolean = false;
 
   private _currentBus: Node;
 
@@ -75,6 +81,10 @@ export class BusGroupController extends Component {
   }
 
   shiftBuses(gameController: GameController) {
+    this.audioController.playBeepSfx();
+    this.audioController.playBusRunSfx();
+    this.movingBus = true;
+
     this.buses.forEach((bus, index) => {
       const busTween = tween(bus)
         .delay(0.5)
@@ -85,10 +95,11 @@ export class BusGroupController extends Component {
           gameController.newBusArrived(
             this._currentBus.getComponent(BusController).busColor
           );
+          this.movingBus = false;
         });
       }
 
-      busTween.start();
+      busTween.union().start();
     });
   }
 }

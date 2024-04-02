@@ -25,7 +25,7 @@ export interface Move {
   rotation: number;
 }
 
-const RUN_THROUGH_TIME = 0.2;
+const RUN_THROUGH_TIME = 0.1;
 
 @ccclass("StickmanController")
 export class StickmanController extends Component {
@@ -34,6 +34,8 @@ export class StickmanController extends Component {
 
   @property(CCString)
   public stickmanColor: string = "";
+
+  public slotIndex: number = -1;
 
   private _animationController: animation.AnimationController = null;
 
@@ -152,6 +154,7 @@ export class StickmanController extends Component {
     toOriginVector: Vec3,
     canRunToBus: boolean,
     busGroupController: BusGroupController,
+    availableSlotIndex: number,
     slot?: Node
   ) {
     if (path.length === 1) {
@@ -197,14 +200,13 @@ export class StickmanController extends Component {
       if (canRunToBus) {
         this.runToBus(busGroupController);
       } else {
-        this.runToSlot(slot);
+        this.runToSlot(slot, availableSlotIndex);
       }
     });
     movesTween.union().start();
   }
 
   fromQueueToBus(busGroupController: BusGroupController) {
-    console.log("from queue to bus");
     const busDestination = new Vec3(0, 0, 4.75);
     this._animationController.setValue("Running", true);
     const fromQueueToBusTween = tween(this.node)
@@ -261,7 +263,7 @@ export class StickmanController extends Component {
       .start();
   }
 
-  runToSlot(slot: Node) {
+  runToSlot(slot: Node, availableSlotIndex: number) {
     const slotWorldPos = slot.getWorldPosition();
     this._animationController.setValue("Running", true);
 
@@ -275,6 +277,7 @@ export class StickmanController extends Component {
           easing: "sineIn",
           onComplete: () => {
             this._animationController.setValue("Running", false);
+            this.slotIndex = availableSlotIndex;
           },
         }
       )

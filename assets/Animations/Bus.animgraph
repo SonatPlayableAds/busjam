@@ -34,9 +34,9 @@
     "__type__": "cc.animation.StateMachine",
     "__editorExtras__": {
       "viewport": {
-        "scale": 0.8399999999999999,
-        "top": -152.0056353365531,
-        "left": -51.555555262200784
+        "scale": 0.8799999999999999,
+        "top": -155.40642646674576,
+        "left": -114.66131240838344
       }
     },
     "_states": [
@@ -111,8 +111,8 @@
   {
     "__type__": "cc.animation.State",
     "__editorExtras__": {
-      "centerX": 382.33333333333337,
-      "centerY": 140.22222222222229,
+      "centerX": 182.33333333333337,
+      "centerY": 50.449494949495005,
       "id": "17115962571240.21512847401106305"
     },
     "name": "Any"
@@ -359,7 +359,7 @@
   {
     "__type__": "cc.animation.AnimationTransition",
     "from": {
-      "__id__": 6
+      "__id__": 5
     },
     "to": {
       "__id__": 14
@@ -372,10 +372,10 @@
     "duration": 0,
     "relativeDuration": false,
     "exitConditionEnabled": true,
-    "destinationStart": 0.28499652469811165,
+    "destinationStart": 0,
     "relativeDestinationStart": false,
     "interruptionSource": 0,
-    "_exitCondition": 0
+    "_exitCondition": 1
   },
   {
     "__type__": "cc.animation.TriggerCondition",

@@ -20,6 +20,7 @@ import { BusGroupController } from "./BusGroupController";
 import { NODE_NAME } from "./helper/Constants";
 import { UIController } from "./UIController";
 import { StickmanController } from "./StickmanController";
+import playableHelper from "./helper/PlayableHelper";
 const { ccclass, property } = _decorator;
 
 @ccclass("GameController")
@@ -60,8 +61,17 @@ export class GameController extends Component {
   private _limitedTime: number = 0;
   private _startCounting: boolean = false;
   private _isGameOver: boolean = false;
+  private _isGoodMove: boolean = false;
+  private _playedAlarm: boolean = false;
 
   start() {
+    const androidUrl =
+      "https://play.google.com/store/apps/details?id=bus.matching.sort.jam.puzzle.brain.stickman";
+    const iosUrl =
+      "https://apps.apple.com/ae/app/bus-escape-3d-jam-puzzle/id6480099401";
+
+    playableHelper.setStoreUrl(iosUrl, androidUrl);
+
     this.loadMap();
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
@@ -77,6 +87,12 @@ export class GameController extends Component {
       this._limitedTime -= deltaTime;
       const timer = Math.round(this._limitedTime);
       this.uiController.updateCounter(timer);
+
+      if (timer === 3 && !this._playedAlarm) {
+        this._playedAlarm = true;
+        this.audioController.playAlarmSfx();
+        this.uiController.playWarning();
+      }
 
       if (timer <= 0) {
         this._startCounting = false;
@@ -102,7 +118,11 @@ export class GameController extends Component {
   }
 
   onTouchStart(event: EventTouch) {
+    if (this.busGroup.movingBus || this._isGameOver) {
+      return;
+    }
     this._startCounting = true;
+    this.uiController.hideTutorial();
     this.cameraComponent.screenPointToRay(
       event.getLocationX(),
       event.getLocationY(),
@@ -123,14 +143,16 @@ export class GameController extends Component {
             this.slotController.availableSlots.findIndex((slot) => slot);
           const slot = this.slotController.slots[availableSlotIndex];
 
-          const toQueueStickman = this.stickmanGroup.actionStickman(
-            stickman,
-            this._activatedMap,
-            this.audioController,
-            this.busGroup.getCurrentBusColor(),
-            slot
-          );
-
+          const { toQueueStickman, rightMove } =
+            this.stickmanGroup.actionStickman(
+              stickman,
+              this._activatedMap,
+              this.audioController,
+              this.busGroup.getCurrentBusColor(),
+              availableSlotIndex,
+              slot
+            );
+          this.playPickStickmanAudio(rightMove, stickman);
           if (toQueueStickman) {
             this.slotController.availableSlots[availableSlotIndex] = false;
             this._queueStickman.push(toQueueStickman);
@@ -147,14 +169,20 @@ export class GameController extends Component {
   }
 
   newBusArrived(busColor: string) {
-    console.log("new bus arrived", busColor);
+    if (this._queueStickman.length === 0) {
+      return;
+    }
 
     const onQueueStickman = [];
+    const slotIndex = [];
+
     for (let i = 0; i < this._queueStickman.length; i++) {
       const stickman = this._queueStickman[i];
       if (
-        stickman.getComponent(StickmanController).stickmanColor === busColor
+        stickman.getComponent(StickmanController).stickmanColor === busColor &&
+        stickman.name === "Stickman"
       ) {
+        slotIndex.push(i);
         onQueueStickman.push(stickman);
         if (onQueueStickman.length === 3) {
           break;
@@ -162,17 +190,60 @@ export class GameController extends Component {
       }
     }
 
-    onQueueStickman.forEach((stickman) => {
-      const stickmanController = stickman.getComponent(StickmanController);
-      stickmanController.fromQueueToBus(this.busGroup);
-    });
+    if (onQueueStickman.length > 0) {
+      let lengthCounter = 0;
+      this._queueStickman = this._queueStickman.filter((stickman, index) => {
+        if (
+          stickman.name === "Stickman" &&
+          lengthCounter < 3 &&
+          stickman.getComponent(StickmanController).stickmanColor === busColor
+        ) {
+          lengthCounter++;
+          this.slotController.availableSlots[
+            stickman.getComponent(StickmanController).slotIndex
+          ] = true;
+          return false;
+        }
+
+        return true;
+      });
+
+      onQueueStickman.forEach((stickman) => {
+        const stickmanController = stickman.getComponent(StickmanController);
+        stickmanController.fromQueueToBus(this.busGroup);
+      });
+    }
+  }
+
+  playPickStickmanAudio(isRightMove: boolean, stickman: Node) {
+    if (isRightMove) {
+      this.audioController.playTapSfx();
+      this.audioController.playYeahSfx();
+      if (
+        this.busGroup.getCurrentBusColor() ===
+        stickman.getComponent(StickmanController).stickmanColor
+      ) {
+        if (this._isGoodMove) {
+          this.uiController.popPraiseText();
+        }
+        this._isGoodMove = true;
+      } else {
+        this._isGoodMove = false;
+      }
+    } else {
+      this.audioController.playUhohSfx();
+    }
   }
 
   gameOver(isWin: boolean) {
     this._isGameOver = true;
-
     this.uiController.showEndCard(isWin);
+
+    input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+    input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
   }
 
-  download() {}
+  download() {
+    playableHelper.redirect();
+  }
 }
