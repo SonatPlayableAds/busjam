@@ -139,6 +139,12 @@ export class GameController extends Component {
 
         if (rayCastToStickman) {
           const stickman = rayCastToStickman.collider.node;
+          const stickmanComponent = stickman.getComponent(StickmanController);
+
+          if (!stickmanComponent.canPick) {
+            return;
+          }
+
           const availableSlotIndex =
             this.slotController.availableSlots.findIndex((slot) => slot);
           const slot = this.slotController.slots[availableSlotIndex];
@@ -152,7 +158,12 @@ export class GameController extends Component {
               availableSlotIndex,
               slot
             );
+          console.log("to queue stickman", toQueueStickman);
+
+          if (rightMove) stickmanComponent.canPick = false;
+
           this.playPickStickmanAudio(rightMove, stickman);
+
           if (toQueueStickman) {
             this.slotController.availableSlots[availableSlotIndex] = false;
             this._queueStickman.push(toQueueStickman);
@@ -169,12 +180,16 @@ export class GameController extends Component {
   }
 
   newBusArrived(busColor: string) {
+    this.filterStickmanList();
+    this.stickmanGroup._numberOfStickmanOnBus = 0;
     if (this._queueStickman.length === 0) {
       return;
     }
 
     const onQueueStickman = [];
     const slotIndex = [];
+
+    console.log("game queue stickman: ", this._queueStickman);
 
     for (let i = 0; i < this._queueStickman.length; i++) {
       const stickman = this._queueStickman[i];
@@ -189,6 +204,8 @@ export class GameController extends Component {
         }
       }
     }
+
+    console.log("On queue stickman: ", onQueueStickman);
 
     if (onQueueStickman.length > 0) {
       let lengthCounter = 0;
@@ -233,6 +250,12 @@ export class GameController extends Component {
     } else {
       this.audioController.playUhohSfx();
     }
+  }
+
+  filterStickmanList() {
+    this._queueStickman = this._queueStickman.filter((stickman) => {
+      return stickman.name === "Stickman";
+    });
   }
 
   gameOver(isWin: boolean) {

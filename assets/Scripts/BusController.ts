@@ -52,8 +52,11 @@ export class BusController extends Component {
   }
 
   openDoor() {
-    let openTrigger = this._animationController.getValue("Open");
-    this._animationController.setValue("Open", !openTrigger);
+    this._animationController.setValue("Open", true);
+
+    this.scheduleOnce(() => {
+      this._animationController.setValue("Open", false);
+    }, 0.1);
   }
 
   onStickmanEnter(stickman: Node) {
@@ -84,5 +87,9 @@ export class BusController extends Component {
 
   checkRunCondition() {
     return this._stickmansOnBus.length === 3;
+  }
+
+  getNumberOfStickmanOnBus() {
+    return this._stickmansOnBus.length;
   }
 }

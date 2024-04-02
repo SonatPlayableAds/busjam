@@ -36,8 +36,10 @@ export class StickmanController extends Component {
   public stickmanColor: string = "";
 
   public slotIndex: number = -1;
+  public doNothing = true;
+  public canPick: boolean = true;
 
-  private _animationController: animation.AnimationController = null;
+  public _animationController: animation.AnimationController = null;
 
   start() {
     this._animationController = this.getComponent(
@@ -156,7 +158,7 @@ export class StickmanController extends Component {
     busGroupController: BusGroupController,
     availableSlotIndex: number,
     slot?: Node
-  ) {
+  ): boolean {
     if (path.length === 1) {
       return;
     }
@@ -166,6 +168,7 @@ export class StickmanController extends Component {
     const prevPoint = new Vec3(this.matrixPos.x, 0, this.matrixPos.y);
     this.node.setRotationFromEuler(new Vec3(0, moves[0].rotation, 0));
     this._animationController.setValue("Running", true);
+    this.doNothing = false;
 
     moves.forEach((move, index) => {
       const endPoint = new Vec3(move.destination.x, 0, move.destination.y);
@@ -196,7 +199,6 @@ export class StickmanController extends Component {
         });
     });
     movesTween.call(() => {
-      // this._animationController.setValue("Running", false);
       if (canRunToBus) {
         this.runToBus(busGroupController);
       } else {
@@ -204,11 +206,14 @@ export class StickmanController extends Component {
       }
     });
     movesTween.union().start();
+
+    return canRunToBus;
   }
 
   fromQueueToBus(busGroupController: BusGroupController) {
     const busDestination = new Vec3(0, 0, 4.75);
     this._animationController.setValue("Running", true);
+
     const fromQueueToBusTween = tween(this.node)
       .to(
         0.5,
@@ -240,7 +245,7 @@ export class StickmanController extends Component {
     this._animationController.setValue("Running", true);
     const runToBusTween = tween(this.node)
       .to(
-        0.5,
+        0.8,
         {
           worldPosition: busDestination,
         },
@@ -266,6 +271,7 @@ export class StickmanController extends Component {
   runToSlot(slot: Node, availableSlotIndex: number) {
     const slotWorldPos = slot.getWorldPosition();
     this._animationController.setValue("Running", true);
+    this._animationController.setValue("Cheer", false);
 
     const runToSlotTween = tween(this.node)
       .to(
@@ -283,5 +289,22 @@ export class StickmanController extends Component {
       )
       .union()
       .start();
+  }
+
+  cheer() {
+    this.doNothing = false;
+    this._animationController.setValue("Cheer", true);
+    this.scheduleOnce(() => {
+      this._animationController.setValue("Cheer", false);
+      this.doNothing = true;
+    }, 3);
+  }
+
+  happy() {
+    this.doNothing = false;
+    this._animationController.setValue("Happy", true);
+    this.scheduleOnce(() => {
+      this._animationController.setValue("Happy", false);
+    }, 3);
   }
 }

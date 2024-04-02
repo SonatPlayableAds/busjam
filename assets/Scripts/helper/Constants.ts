@@ -19,6 +19,8 @@ export const BUS_SEAT = [
   new Vec3(-0.025, 0.04, 0),
 ];
 
+export const CHEER_TIME = 3;
+
 // export enum PLAY_AUDIO_NAME  {
 //   TAP_SFX,
 // }

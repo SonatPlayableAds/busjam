@@ -27,12 +27,26 @@ export class StickmanGroupController extends Component {
 
   @property([Node])
   public stickmans: Node[] = [];
+  public _numberOfStickmanOnBus: number = 0;
 
   private _toOriginVector: Vec3 = new Vec3();
+  private _cheerCounterTime: number = 2;
+  private _happyCounterTime: number = 2.5;
 
   start() {}
 
-  update(deltaTime: number) {}
+  update(deltaTime: number) {
+    this._cheerCounterTime += deltaTime;
+    this._happyCounterTime += deltaTime;
+    if (this._cheerCounterTime >= 4) {
+      this._cheerCounterTime = 0;
+      this.randomCheerStickman();
+    }
+    if (this._happyCounterTime >= 4) {
+      this._happyCounterTime = 0;
+      this.randomHappyStickman();
+    }
+  }
 
   spawnStickmans(
     width: number,
@@ -94,11 +108,15 @@ export class StickmanGroupController extends Component {
   ): { toQueueStickman: Node | null; rightMove: boolean } {
     const stickmanController = stickman.getComponent(StickmanController);
     const shortestPath = stickmanController.findShortestPath(activatedMap);
+    stickmanController._animationController.setValue("Cheer", false);
+    stickmanController._animationController.setValue("Happy", false);
 
     if (shortestPath === undefined || shortestPath.length === 0) {
       // audioController.playAudio("error");
       return { toQueueStickman: null, rightMove: false };
     }
+
+    this.removeStickman(stickman);
 
     // active the stickman point
     activatedMap[stickmanController.matrixPos.y][
@@ -106,7 +124,12 @@ export class StickmanGroupController extends Component {
     ] = 0;
 
     if (shortestPath.length === 1) {
-      if (currentBusColor === stickmanController.stickmanColor) {
+      if (
+        this.canRunToBus(
+          currentBusColor === stickmanController.stickmanColor,
+          this.busGroupController
+        )
+      ) {
         stickmanController.runToBus(this.busGroupController);
         return { toQueueStickman: null, rightMove: true };
       } else {
@@ -114,20 +137,56 @@ export class StickmanGroupController extends Component {
         return { toQueueStickman: stickman, rightMove: true };
       }
     } else {
-      stickmanController.runAlongPath(
+      const isOnBus = stickmanController.runAlongPath(
         shortestPath,
         this._toOriginVector,
-        currentBusColor === stickmanController.stickmanColor,
+        this.canRunToBus(
+          currentBusColor === stickmanController.stickmanColor,
+          this.busGroupController
+        ),
         this.busGroupController,
         availableSlotIndex,
         availableSlot
       );
 
-      if (currentBusColor === stickmanController.stickmanColor) {
+      if (isOnBus) {
         return { toQueueStickman: null, rightMove: true };
       } else {
         return { toQueueStickman: stickman, rightMove: true };
       }
     }
+  }
+
+  removeStickman(stickman: Node) {
+    const index = this.stickmans.findIndex((item) => {
+      return item.uuid === stickman.uuid;
+    });
+
+    this.stickmans.splice(index, 1);
+  }
+
+  randomCheerStickman() {
+    this.stickmans.forEach((stickman) => {
+      const stickmanCtl = stickman.getComponent(StickmanController);
+      const random = Math.random();
+      if (random < 0.5 && stickmanCtl.doNothing) {
+        stickmanCtl.cheer();
+      }
+    });
+  }
+
+  randomHappyStickman() {
+    this.stickmans.forEach((stickman) => {
+      const stickmanCtl = stickman.getComponent(StickmanController);
+      if (Math.random() < 0.2 && stickman && stickmanCtl.doNothing) {
+        stickmanCtl.happy();
+      }
+    });
+  }
+
+  canRunToBus(sameColor: boolean, busGroupController: BusGroupController) {
+    const flag = sameColor && this._numberOfStickmanOnBus < 3;
+    if (flag) this._numberOfStickmanOnBus += 1;
+    return flag;
   }
 }

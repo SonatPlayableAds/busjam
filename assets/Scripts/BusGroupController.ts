@@ -102,4 +102,10 @@ export class BusGroupController extends Component {
       busTween.union().start();
     });
   }
+
+  getNumberOfStickman(): number {
+    return this._currentBus
+      .getComponent(BusController)
+      .getNumberOfStickmanOnBus();
+  }
 }
