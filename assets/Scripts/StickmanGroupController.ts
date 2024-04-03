@@ -73,22 +73,26 @@ export class StickmanGroupController extends Component {
           activatedMap[y][x] = 1;
           continue;
         } else {
+          const stickmanPos = new Vec3(x, 0, y).subtract(this._toOriginVector);
+          this.spawnFootBrick(stickmanPos);
+
+          if (map[y][x] === 0) {
+            activatedMap[y][x] = 0;
+            continue;
+          }
+
           activatedMap[y][x] = 1;
+          const stickmanMapIndex = map[y][x] - 1;
           const newStickman = instantiate(this.stickmanPrefab);
-          const footBrick = instantiate(this.footBrickPrefab);
-          const currentMtl = stickmanMaterials[map[y][x]];
+          const currentMtl = stickmanMaterials[stickmanMapIndex];
           this.node.addChild(newStickman);
-          this.node.addChild(footBrick);
 
           newStickman.getComponent(StickmanController).applyMtl(currentMtl);
           newStickman.getComponent(StickmanController).setMatrixPos(x, y);
           newStickman.getComponent(StickmanController).stickmanColor =
-            PLAYER_COLOR[map[y][x]];
-          const stickmanPos = new Vec3(x, 0, y).subtract(this._toOriginVector);
+            PLAYER_COLOR[stickmanMapIndex];
 
           newStickman.setPosition(stickmanPos);
-          footBrick.setPosition(stickmanPos);
-          footBrick.setScale(new Vec3(0.88, 0.88, 0.88));
 
           this.stickmans.push(newStickman);
         }
@@ -96,6 +100,13 @@ export class StickmanGroupController extends Component {
     }
 
     return activatedMap;
+  }
+
+  spawnFootBrick(position: Vec3) {
+    const footBrick = instantiate(this.footBrickPrefab);
+    this.node.addChild(footBrick);
+    footBrick.setPosition(position);
+    footBrick.setScale(new Vec3(0.88, 0.88, 0.88));
   }
 
   actionStickman(
