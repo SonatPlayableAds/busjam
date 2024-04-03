@@ -113,7 +113,7 @@ export class GameController extends Component {
       stickmans,
       this.stickmanMtl
     );
-    this.busGroup.spawnBuses(buses, this.busMtl);
+    this.busGroup.spawnBuses(buses, this.stickmanMtl);
     this.wallGroup.spawnWalls(width, height, stickmans);
   }
 

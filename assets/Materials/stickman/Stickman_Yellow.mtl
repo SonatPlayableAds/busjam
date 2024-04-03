@@ -4,15 +4,14 @@
   "_objFlags": 0,
   "_native": "",
   "_effectAsset": {
-    "__uuid__": "1baf0fc9-befa-459c-8bdd-af1a450a0319",
+    "__uuid__": "f648964e-8d32-41fc-9ac9-7a1e714dd17b",
     "__expectedType__": "cc.EffectAsset"
   },
   "_techIdx": 0,
   "_defines": [
     {
       "USE_INSTANCING": true,
-      "USE_ALBEDO_MAP": true,
-      "ALPHA_TEST_CHANNEL": "r"
+      "USE_ALBEDO_MAP": true
     },
     {},
     {}
@@ -48,13 +47,13 @@
   ],
   "_props": [
     {
-      "alphaThreshold": 0,
-      "roughness": 0.794,
-      "metallic": 0.212,
       "mainTexture": {
         "__uuid__": "5b749293-618e-4147-803a-13b8cebca38a@6c48a",
         "__expectedType__": "cc.Texture2D"
-      }
+      },
+      "albedoScale": 1.5,
+      "alphaThreshold": 0,
+      "metallic": 0.212
     },
     {},
     {}
