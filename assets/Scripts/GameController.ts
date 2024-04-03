@@ -10,7 +10,11 @@ import {
   Material,
   Node,
   PhysicsSystem,
+  screen,
+  Size,
   Texture2D,
+  Vec3,
+  view,
 } from "cc";
 import { SlotGroupController } from "./SlotGroupController";
 import { StickmanGroupController } from "./StickmanGroupController";
@@ -71,6 +75,9 @@ export class GameController extends Component {
       "https://apps.apple.com/ae/app/bus-escape-3d-jam-puzzle/id6480099401";
 
     playableHelper.setStoreUrl(iosUrl, androidUrl);
+
+    const visible: Size = screen.windowSize;
+    this.updateWarnField();
 
     this.loadMap();
 
@@ -158,7 +165,6 @@ export class GameController extends Component {
               availableSlotIndex,
               slot
             );
-          console.log("to queue stickman", toQueueStickman);
 
           if (rightMove) stickmanComponent.canPick = false;
 
@@ -189,8 +195,6 @@ export class GameController extends Component {
     const onQueueStickman = [];
     const slotIndex = [];
 
-    console.log("game queue stickman: ", this._queueStickman);
-
     for (let i = 0; i < this._queueStickman.length; i++) {
       const stickman = this._queueStickman[i];
       if (
@@ -204,8 +208,6 @@ export class GameController extends Component {
         }
       }
     }
-
-    console.log("On queue stickman: ", onQueueStickman);
 
     if (onQueueStickman.length > 0) {
       let lengthCounter = 0;
@@ -256,6 +258,16 @@ export class GameController extends Component {
     this._queueStickman = this._queueStickman.filter((stickman) => {
       return stickman.name === "Stickman";
     });
+  }
+
+  updateWarnField() {
+    const windowSize = screen.windowSize;
+    const pixelRatio = screen.devicePixelRatio;
+
+    const realWidth = windowSize.width / pixelRatio;
+    const realHeight = windowSize.height / pixelRatio;
+
+    this.uiController.updateWarnField(realWidth, realHeight);
   }
 
   gameOver(isWin: boolean) {

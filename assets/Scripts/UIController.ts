@@ -7,6 +7,7 @@ import {
   Vec2,
   Vec3,
   Animation,
+  UITransform,
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -84,5 +85,43 @@ export class UIController extends Component {
     tween(this.endCardWrapper)
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
       .start();
+  }
+
+  updateWarnField(realWidth: number, realHeight: number) {
+    const topNode = this.warn.getChildByName("Top")!;
+    const bottomNode = this.warn.getChildByName("Bot")!;
+    const leftNode = this.warn.getChildByName("Left")!;
+    const rightNode = this.warn.getChildByName("Right")!;
+
+    if (topNode && bottomNode && leftNode && rightNode) {
+      topNode.setPosition(
+        0,
+        realHeight / 2 +
+          topNode.getComponent(UITransform).contentSize.height / 2 -
+          70,
+        0
+      );
+      bottomNode.setPosition(
+        0,
+        -realHeight / 2 -
+          bottomNode.getComponent(UITransform).contentSize.height / 2 +
+          70,
+        0
+      );
+      leftNode.setPosition(
+        -realWidth / 2 -
+          leftNode.getComponent(UITransform).contentSize.width / 2 +
+          70,
+        0,
+        0
+      );
+      rightNode.setPosition(
+        realWidth / 2 +
+          leftNode.getComponent(UITransform).contentSize.width / 2 -
+          70,
+        0,
+        0
+      );
+    }
   }
 }
