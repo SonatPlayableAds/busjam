@@ -51,7 +51,7 @@
         "__uuid__": "43c82746-c52c-4706-8e5c-bf4f90e8ca4c@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "albedoScale": 1.5,
+      "albedoScale": 1.2,
       "alphaThreshold": 0,
       "metallic": 0.212
     },
