@@ -1,4 +1,4 @@
-import { Vec2 } from "cc";
+import { Quat, Vec2, Vec3 } from "cc";
 import { Move } from "../StickmanController";
 
 export class Helper {
@@ -57,6 +57,46 @@ export class Helper {
     }
 
     return revertedMatrix;
+  }
+
+  isGoodPoint(matrix: number[][], point: { x: number; y: number }): boolean {
+    // if (point.y === 0) {
+    //   return true;
+    // }
+
+    const directions = [
+      [-1, 0],
+      [0, -1],
+      [1, 0],
+      [0, 1],
+    ]; // Up, Left, Down, Right
+
+    for (const [dx, dy] of directions) {
+      const newX = point.x + dx;
+      const newY = point.y + dy;
+
+      if (
+        newX >= 0 &&
+        newX < matrix.length &&
+        newY >= 0 &&
+        newY < matrix[0].length
+      ) {
+        if (matrix[newX][newY] === 0) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  getRotationToBus(stickmanPos: Vec3, busPos: Vec3): Quat {
+    const vec1 = new Vec2(busPos.x - stickmanPos.x, busPos.z - stickmanPos.z);
+    const vec2 = new Vec2(0, 1);
+
+    const angle = vec1.angle(vec2);
+
+    return Quat.fromEuler(new Quat(), 0, (angle / Math.PI + 1) * 180, 0);
   }
 }
 

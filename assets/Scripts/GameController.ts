@@ -54,9 +54,6 @@ export class GameController extends Component {
   public audioController: AudioController = null!;
 
   @property([Material])
-  public busMtl: Material[] = [];
-
-  @property([Material])
   public stickmanMtl: Material[] = [];
 
   private _activatedMap: number[][] = [[]];
@@ -67,6 +64,8 @@ export class GameController extends Component {
   private _isGameOver: boolean = false;
   private _isGoodMove: boolean = false;
   private _playedAlarm: boolean = false;
+  private _nonInteractTime: number = 0;
+  private _playedTut: boolean = false;
 
   start() {
     const androidUrl =
@@ -80,6 +79,7 @@ export class GameController extends Component {
     this.updateWarnField();
 
     this.loadMap();
+    this.stickmanGroup.playTut(this._activatedMap);
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -91,11 +91,13 @@ export class GameController extends Component {
     }
 
     if (this._startCounting && !this._isGameOver) {
+      this._nonInteractTime += deltaTime;
+
       this._limitedTime -= deltaTime;
       const timer = Math.round(this._limitedTime);
       this.uiController.updateCounter(timer);
 
-      if (timer === 3 && !this._playedAlarm) {
+      if (timer <= 10 && !this._playedAlarm) {
         this._playedAlarm = true;
         this.audioController.playAlarmSfx();
         this.uiController.playWarning();
@@ -104,6 +106,11 @@ export class GameController extends Component {
       if (timer <= 0) {
         this._startCounting = false;
         this.gameOver(false);
+      }
+
+      if (this._nonInteractTime >= 3 && !this._playedTut) {
+        this._playedTut = true;
+        this.stickmanGroup.playTut(this._activatedMap);
       }
     }
   }
@@ -125,11 +132,12 @@ export class GameController extends Component {
   }
 
   onTouchStart(event: EventTouch) {
+    this._nonInteractTime = 0;
     if (this.busGroup.movingBus || this._isGameOver) {
       return;
     }
     this._startCounting = true;
-    this.uiController.hideTutorial();
+    this.deactivateTutorial();
     this.cameraComponent.screenPointToRay(
       event.getLocationX(),
       event.getLocationY(),
@@ -192,7 +200,7 @@ export class GameController extends Component {
       return;
     }
 
-    const onQueueStickman = [];
+    const availableOnQueueStickman = [];
     const slotIndex = [];
 
     for (let i = 0; i < this._queueStickman.length; i++) {
@@ -202,14 +210,14 @@ export class GameController extends Component {
         stickman.name === "Stickman"
       ) {
         slotIndex.push(i);
-        onQueueStickman.push(stickman);
-        if (onQueueStickman.length === 3) {
+        availableOnQueueStickman.push(stickman);
+        if (availableOnQueueStickman.length === 3) {
           break;
         }
       }
     }
 
-    if (onQueueStickman.length > 0) {
+    if (availableOnQueueStickman.length > 0) {
       let lengthCounter = 0;
       this._queueStickman = this._queueStickman.filter((stickman, index) => {
         if (
@@ -227,7 +235,10 @@ export class GameController extends Component {
         return true;
       });
 
-      onQueueStickman.forEach((stickman) => {
+      this.stickmanGroup._numberOfStickmanOnBus +=
+        availableOnQueueStickman.length;
+
+      availableOnQueueStickman.forEach((stickman) => {
         const stickmanController = stickman.getComponent(StickmanController);
         stickmanController.fromQueueToBus(this.busGroup);
       });
@@ -273,9 +284,16 @@ export class GameController extends Component {
   gameOver(isWin: boolean) {
     this._isGameOver = true;
     this.uiController.showEndCard(isWin);
+    this.audioController.playLoseSfx();
 
     input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
+  }
+
+  deactivateTutorial() {
+    this._playedTut = false;
+    this.uiController.hideTutorial();
+    this.stickmanGroup.hideTutHand();
   }
 
   download() {

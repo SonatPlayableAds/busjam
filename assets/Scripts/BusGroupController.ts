@@ -57,7 +57,8 @@ export class BusGroupController extends Component {
   spawnBuses(buses: number[], busMaterials: Material[]) {
     buses.forEach((bus, index) => {
       const busPos = new Vec3(-index * BUS_DISTANCE, 0, 0);
-      const currentBusMtl = busMaterials[bus];
+      const busMapIndex = bus - 1;
+      const currentBusMtl = busMaterials[busMapIndex];
 
       const newBus = instantiate(this.busPrefab);
       if (index === 0) this._currentBus = newBus;
@@ -66,7 +67,7 @@ export class BusGroupController extends Component {
 
       newBus.setPosition(busPos);
       newBus.getComponent(BusController).applyBusMtl(currentBusMtl);
-      newBus.getComponent(BusController).busColor = PLAYER_COLOR[bus];
+      newBus.getComponent(BusController).busColor = PLAYER_COLOR[busMapIndex];
 
       this.buses.push(newBus);
     });
@@ -107,5 +108,9 @@ export class BusGroupController extends Component {
     return this._currentBus
       .getComponent(BusController)
       .getNumberOfStickmanOnBus();
+  }
+
+  pushStickmanFromQueueToBus(stickmans: Node[]) {
+    this._currentBus.getComponent(BusController).pushStickmanToBus(stickmans);
   }
 }

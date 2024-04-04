@@ -11,6 +11,8 @@ export enum PLAYER_COLOR {
   VIOLET,
   GREEN,
   YELLOW,
+  WHITE,
+  RED,
 }
 
 export const BUS_SEAT = [
@@ -20,6 +22,8 @@ export const BUS_SEAT = [
 ];
 
 export const CHEER_TIME = 3;
+
+export const BUS_POS: Vec3 = new Vec3(0, 0, -3.712);
 
 // export enum PLAY_AUDIO_NAME  {
 //   TAP_SFX,

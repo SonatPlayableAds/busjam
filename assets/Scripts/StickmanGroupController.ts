@@ -12,6 +12,7 @@ import { StickmanController } from "./StickmanController";
 import { AudioController } from "./AudioController";
 import { PLAYER_COLOR } from "./helper/Constants";
 import { BusGroupController } from "./BusGroupController";
+import { helper } from "./helper/Helper";
 const { ccclass, property } = _decorator;
 
 @ccclass("StickmanGroupController")
@@ -27,6 +28,10 @@ export class StickmanGroupController extends Component {
 
   @property([Node])
   public stickmans: Node[] = [];
+
+  @property(Node)
+  public tutHand: Node = null!;
+
   public _numberOfStickmanOnBus: number = 0;
 
   private _toOriginVector: Vec3 = new Vec3();
@@ -195,9 +200,51 @@ export class StickmanGroupController extends Component {
     });
   }
 
+  playTut(activatedMap: number[][]) {
+    const canPickStickman = this.findCanPickStickmanPos(activatedMap);
+
+    if (canPickStickman) {
+      const stickmanPos = canPickStickman.node.position;
+      this.tutHand.setPosition(
+        new Vec3(stickmanPos.x + 0.7, 0, stickmanPos.z + 1.1)
+      );
+      this.tutHand.active = true;
+    }
+  }
+
+  findCanPickStickmanPos(activatedMap: number[][]): StickmanController | null {
+    const reversedMap = helper.revertMatrix(activatedMap);
+
+    for (let i = 0; i < this.stickmans.length; i++) {
+      const stickman = this.stickmans[i];
+      const stickmanController = stickman.getComponent(StickmanController);
+      const stickmanPos = stickmanController.matrixPos;
+      if (
+        helper.isGoodPoint(reversedMap, {
+          x: stickmanPos.x,
+          y: stickmanPos.y,
+        }) &&
+        stickmanController.stickmanColor ===
+          this.busGroupController.getCurrentBusColor()
+      ) {
+        return stickmanController;
+      }
+    }
+
+    return null;
+  }
+
+  hideTutHand() {
+    this.tutHand.active = false;
+  }
+
   canRunToBus(sameColor: boolean, busGroupController: BusGroupController) {
     const flag = sameColor && this._numberOfStickmanOnBus < 3;
     if (flag) this._numberOfStickmanOnBus += 1;
     return flag;
+  }
+
+  resetStickmanOnBus() {
+    this._numberOfStickmanOnBus = 0;
   }
 }

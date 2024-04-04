@@ -83,7 +83,9 @@ export class UIController extends Component {
     }
 
     tween(this.endCardWrapper)
+      // .delay(0.5)
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
+      .union()
       .start();
   }
 

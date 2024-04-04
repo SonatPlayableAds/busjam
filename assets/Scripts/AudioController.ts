@@ -24,12 +24,19 @@ export class AudioController extends Component {
   @property(AudioSource)
   public alarmSfx: AudioSource = null!;
 
+  @property(AudioSource)
+  public loseSfx: AudioSource = null!;
+
   start() {}
 
   update(deltaTime: number) {}
 
   playTapSfx() {
     this.tapSfx.playOneShot(this.tapSfx.clip, this.tapSfx.volume);
+  }
+
+  playLoseSfx() {
+    this.loseSfx.playOneShot(this.loseSfx.clip, this.loseSfx.volume);
   }
 
   playUhohSfx() {

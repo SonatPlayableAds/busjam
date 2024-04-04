@@ -18,6 +18,7 @@ import { GameController } from "./GameController";
 import aStarHelper, { Point } from "./helper/AStar";
 import { helper, Helper } from "./helper/Helper";
 import { BusGroupController } from "./BusGroupController";
+import { BUS_POS } from "./helper/Constants";
 const { ccclass, property } = _decorator;
 
 export interface Move {
@@ -211,14 +212,14 @@ export class StickmanController extends Component {
   }
 
   fromQueueToBus(busGroupController: BusGroupController) {
-    const busDestination = new Vec3(0, 0, 4.75);
+    const busDestination = BUS_POS;
     this._animationController.setValue("Running", true);
 
     const fromQueueToBusTween = tween(this.node)
       .to(
         0.5,
         {
-          worldPosition: busDestination,
+          position: busDestination,
         },
         { easing: "sineIn" }
       )
@@ -240,14 +241,18 @@ export class StickmanController extends Component {
   }
 
   runToBus(busGroupCtl: BusGroupController) {
-    const busDestination = new Vec3(0, 0, 4.75);
+    const rotationToBus = helper.getRotationToBus(
+      this.node.getWorldPosition(),
+      busGroupCtl.node.getWorldPosition()
+    );
     // const runningTrigger = this._animationController.getValue("Running");
     this._animationController.setValue("Running", true);
     const runToBusTween = tween(this.node)
+      .to(0.1, { rotation: rotationToBus })
       .to(
         0.8,
         {
-          worldPosition: busDestination,
+          position: BUS_POS,
         },
         { easing: "sineIn" }
       )

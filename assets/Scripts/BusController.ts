@@ -92,4 +92,8 @@ export class BusController extends Component {
   getNumberOfStickmanOnBus() {
     return this._stickmansOnBus.length;
   }
+
+  pushStickmanToBus(stickmans: Node[]) {
+    return this._stickmansOnBus.push(...stickmans);
+  }
 }
