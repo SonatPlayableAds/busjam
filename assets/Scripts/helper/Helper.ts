@@ -60,9 +60,9 @@ export class Helper {
   }
 
   isGoodPoint(matrix: number[][], point: { x: number; y: number }): boolean {
-    // if (point.y === 0) {
-    //   return true;
-    // }
+    if (point.y === 0) {
+      return true;
+    }
 
     const directions = [
       [-1, 0],

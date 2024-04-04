@@ -51,15 +51,22 @@
         "__uuid__": "c623c982-2d75-4f92-86bc-91876a694b0c@6c48a",
         "__expectedType__": "cc.Texture2D"
       },
-      "shininessExponent": 80,
-      "specularColor": {
+      "mainColor": {
         "__type__": "cc.Color",
         "r": 255,
         "g": 255,
         "b": 255,
         "a": 0
       },
-      "metallic": 0.6
+      "albedoScale": 2,
+      "alphaThreshold": 0,
+      "emissive": {
+        "__type__": "cc.Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      }
     },
     {},
     {}

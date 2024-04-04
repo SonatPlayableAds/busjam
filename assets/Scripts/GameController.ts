@@ -56,6 +56,9 @@ export class GameController extends Component {
   @property([Material])
   public stickmanMtl: Material[] = [];
 
+  @property([Material])
+  public busMtl: Material[] = [];
+
   private _activatedMap: number[][] = [[]];
   private _ray: geometry.Ray = new geometry.Ray();
   private _queueStickman: Node[] = [];
@@ -99,8 +102,8 @@ export class GameController extends Component {
 
       if (timer <= 10 && !this._playedAlarm) {
         this._playedAlarm = true;
-        this.audioController.playAlarmSfx();
-        this.uiController.playWarning();
+        // this.audioController.playAlarmSfx();
+        // this.uiController.playWarning();
       }
 
       if (timer <= 0) {
@@ -248,7 +251,7 @@ export class GameController extends Component {
   playPickStickmanAudio(isRightMove: boolean, stickman: Node) {
     if (isRightMove) {
       this.audioController.playTapSfx();
-      this.audioController.playYeahSfx();
+      // this.audioController.playYeahSfx();
       if (
         this.busGroup.getCurrentBusColor() ===
         stickman.getComponent(StickmanController).stickmanColor
