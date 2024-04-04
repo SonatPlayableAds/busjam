@@ -1,5 +1,12 @@
 {
   "splash-setting": {
-    "totalTime": 0
+    "totalTime": 500,
+    "url": "D:\\playable-ads\\BusJam\\assets\\UI-Sprite\\busjam_icon.png",
+    "clearColor": {
+      "x": 0.22745098039215686,
+      "y": 0.22745098039215686,
+      "z": 0.22745098039215686,
+      "w": 1
+    }
   }
 }

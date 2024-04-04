@@ -90,26 +90,26 @@ export class UIController extends Component {
   }
 
   updateWarnField(realWidth: number, realHeight: number) {
-    const topNode = this.warn.getChildByName("Top")!;
-    const bottomNode = this.warn.getChildByName("Bot")!;
+    // const topNode = this.warn.getChildByName("Top")!;
+    // const bottomNode = this.warn.getChildByName("Bot")!;
     const leftNode = this.warn.getChildByName("Left")!;
     const rightNode = this.warn.getChildByName("Right")!;
 
-    if (topNode && bottomNode && leftNode && rightNode) {
-      topNode.setPosition(
-        0,
-        realHeight / 2 +
-          topNode.getComponent(UITransform).contentSize.height / 2 -
-          70,
-        0
-      );
-      bottomNode.setPosition(
-        0,
-        -realHeight / 2 -
-          bottomNode.getComponent(UITransform).contentSize.height / 2 +
-          70,
-        0
-      );
+    if (leftNode && rightNode) {
+      // topNode.setPosition(
+      //   0,
+      //   realHeight / 2 +
+      //     topNode.getComponent(UITransform).contentSize.height / 2 -
+      //     70,
+      //   0
+      // );
+      // bottomNode.setPosition(
+      //   0,
+      //   -realHeight / 2 -
+      //     bottomNode.getComponent(UITransform).contentSize.height / 2 +
+      //     70,
+      //   0
+      // );
       leftNode.setPosition(
         -realWidth / 2 -
           leftNode.getComponent(UITransform).contentSize.width / 2 +
