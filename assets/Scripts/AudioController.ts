@@ -21,9 +21,8 @@ export class AudioController extends Component {
   @property(AudioSource)
   public busRunSfx: AudioSource = null!;
 
-  @property(AudioSource)
-  public alarmSfx: AudioSource = null!;
-
+  // @property(AudioSource)
+  // public alarmSfx: AudioSource = null!;
   @property(AudioSource)
   public loseSfx: AudioSource = null!;
 
@@ -56,6 +55,6 @@ export class AudioController extends Component {
   }
 
   playAlarmSfx() {
-    this.alarmSfx.playOneShot(this.alarmSfx.clip, this.alarmSfx.volume);
+    // this.alarmSfx.playOneShot(this.alarmSfx.clip, this.alarmSfx.volume);
   }
 }

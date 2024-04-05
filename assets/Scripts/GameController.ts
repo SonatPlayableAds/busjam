@@ -103,7 +103,6 @@ export class GameController extends Component {
       if (timer <= 10 && !this._playedAlarm) {
         this._playedAlarm = true;
         // this.audioController.playAlarmSfx();
-        // this.uiController.playWarning();
       }
 
       if (timer <= 0) {
@@ -132,6 +131,7 @@ export class GameController extends Component {
     );
     this.busGroup.spawnBuses(buses, this.stickmanMtl);
     this.wallGroup.spawnWalls(width, height, stickmans);
+    playableHelper.gameStart();
   }
 
   onTouchStart(event: EventTouch) {
@@ -250,8 +250,8 @@ export class GameController extends Component {
 
   playPickStickmanAudio(isRightMove: boolean, stickman: Node) {
     if (isRightMove) {
-      this.audioController.playTapSfx();
-      // this.audioController.playYeahSfx();
+      // this.audioController.playTapSfx();
+      this.audioController.playYeahSfx();
       if (
         this.busGroup.getCurrentBusColor() ===
         stickman.getComponent(StickmanController).stickmanColor
@@ -264,6 +264,7 @@ export class GameController extends Component {
         this._isGoodMove = false;
       }
     } else {
+      this.uiController.playWarning();
       this.audioController.playUhohSfx();
     }
   }
@@ -286,6 +287,7 @@ export class GameController extends Component {
 
   gameOver(isWin: boolean) {
     this._isGameOver = true;
+    playableHelper.gameEnd();
     this.uiController.showEndCard(isWin);
     this.audioController.playLoseSfx();
 

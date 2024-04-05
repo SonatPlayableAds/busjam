@@ -34,6 +34,9 @@ export class UIController extends Component {
   @property(Node)
   public praseText: Node = null!;
 
+  @property(Node)
+  public playBtn: Node = null!;
+
   private _isHideTutorial = false;
 
   start() {
@@ -43,6 +46,10 @@ export class UIController extends Component {
   }
 
   update(deltaTime: number) {}
+
+  hidePlayBtn() {
+    this.playBtn.active = false;
+  }
 
   updateCounter(time: number) {
     const timeInString = `00:${time < 10 ? `0${time}` : time}`;
@@ -76,6 +83,7 @@ export class UIController extends Component {
   }
 
   showEndCard(isWin: boolean) {
+    this.hidePlayBtn();
     if (isWin) {
       this.winEndCard.active = true;
     } else {
