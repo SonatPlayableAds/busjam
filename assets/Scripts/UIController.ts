@@ -51,7 +51,7 @@ export class UIController extends Component {
   }
 
   popPraiseText() {
-    const praiseTexts = ["Grate!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
+    const praiseTexts = ["Great!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
     const randomIndex = Math.floor(Math.random() * praiseTexts.length);
     const text = praiseTexts[randomIndex];
 
