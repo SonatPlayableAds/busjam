@@ -3771,36 +3771,7 @@
         "__expectedType__": "cc.Material"
       }
     ],
-    "busMtl": [
-      {
-        "__uuid__": "2a58cfcf-d516-4b6b-8788-07057df29881",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "ea1ab128-0dc1-4643-808c-53160233d95c",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "6d331aca-51fb-4961-ae27-90b28e71e71f",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "aa4bce11-c2e0-40b4-b16f-98aa6185b7b0",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "716ede5e-5283-4394-9441-148381554c79",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "630930f7-930c-4ed4-ad74-4efd56b13541",
-        "__expectedType__": "cc.Material"
-      },
-      {
-        "__uuid__": "51d9e7a8-4581-40f5-bc2a-552b96075cdf",
-        "__expectedType__": "cc.Material"
-      }
-    ],
+    "busMtl": [],
     "_id": "1cpjZpeo5Ps692x5uB4u9V"
   },
   {
@@ -5462,12 +5433,12 @@
     "playOnLoad": true,
     "_clips": [
       {
-        "__uuid__": "5e5c6989-e438-41a3-8523-03457c217e69",
+        "__uuid__": "4d89a9c2-01a3-4bd4-95db-3699b18e90ee",
         "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
-      "__uuid__": "5e5c6989-e438-41a3-8523-03457c217e69",
+      "__uuid__": "4d89a9c2-01a3-4bd4-95db-3699b18e90ee",
       "__expectedType__": "cc.AnimationClip"
     },
     "_id": "a4PRlWquNEcIAVFoFfhqlx"

@@ -58,7 +58,7 @@ export class UIController extends Component {
   }
 
   popPraiseText() {
-    const praiseTexts = ["Grate!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
+    const praiseTexts = ["Great!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
     const randomIndex = Math.floor(Math.random() * praiseTexts.length);
     const text = praiseTexts[randomIndex];
 
@@ -83,6 +83,7 @@ export class UIController extends Component {
   }
 
   showEndCard(isWin: boolean) {
+    // console.log(isWin);
     this.hidePlayBtn();
     if (isWin) {
       this.winEndCard.active = true;
