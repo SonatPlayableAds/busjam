@@ -794,9 +794,6 @@
     "busRunSfx": {
       "__id__": 16
     },
-    "alarmSfx": {
-      "__id__": 18
-    },
     "loseSfx": {
       "__id__": 20
     },
@@ -3828,6 +3825,7 @@
     "praseText": {
       "__id__": 39
     },
+    "playBtn": null,
     "_id": "6f381E57lMC5wrwlZmdp2f"
   },
   {

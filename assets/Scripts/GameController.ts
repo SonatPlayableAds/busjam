@@ -83,6 +83,7 @@ export class GameController extends Component {
 
     this.loadMap();
     this.stickmanGroup.playTut(this._activatedMap);
+    playableHelper.gameStart();
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -286,6 +287,7 @@ export class GameController extends Component {
 
   gameOver(isWin: boolean) {
     this._isGameOver = true;
+    playableHelper.gameEnd();
     this.uiController.showEndCard(isWin);
     this.audioController.playLoseSfx();
 
