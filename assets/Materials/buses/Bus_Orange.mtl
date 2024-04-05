@@ -58,7 +58,7 @@
         "b": 0,
         "a": 255
       },
-      "albedoScale": 0.7,
+      "albedoScale": 1.5,
       "alphaThreshold": 0,
       "metallic": 0.212
     },

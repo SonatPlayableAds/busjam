@@ -58,7 +58,7 @@
         "b": 255,
         "a": 0
       },
-      "albedoScale": 2,
+      "albedoScale": 1.5,
       "alphaThreshold": 0,
       "emissive": {
         "__type__": "cc.Color",

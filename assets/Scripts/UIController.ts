@@ -65,6 +65,7 @@ export class UIController extends Component {
   }
 
   playWarning() {
+    console.log("playWarning");
     const anim = this.warn.getComponent(Animation);
     anim.play("warn");
   }

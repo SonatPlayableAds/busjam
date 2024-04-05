@@ -101,10 +101,10 @@ export class GameController extends Component {
       const timer = Math.round(this._limitedTime);
       this.uiController.updateCounter(timer);
 
-      if (timer <= 10 && !this._playedAlarm) {
+      if (timer <= 3 && !this._playedAlarm) {
         this._playedAlarm = true;
-        // this.audioController.playAlarmSfx();
-        // this.uiController.playWarning();
+        this.audioController.playAlarmSfx();
+        this.uiController.playWarning();
       }
 
       if (timer <= 0) {
@@ -129,17 +129,17 @@ export class GameController extends Component {
       width,
       height,
       stickmans,
-      this.stickmanMtl
+      this.busMtl
     );
-    this.busGroup.spawnBuses(buses, this.stickmanMtl);
+    this.busGroup.spawnBuses(buses, this.busMtl);
     this.wallGroup.spawnWalls(width, height, stickmans);
   }
 
   onTouchStart(event: EventTouch) {
     this._nonInteractTime = 0;
-    if (this.busGroup.movingBus || this._isGameOver) {
-      return;
-    }
+    // if (this.busGroup.movingBus || this._isGameOver) {
+    //   return;
+    // }
     this._startCounting = true;
     this.deactivateTutorial();
     this.cameraComponent.screenPointToRay(
@@ -252,7 +252,7 @@ export class GameController extends Component {
   playPickStickmanAudio(isRightMove: boolean, stickman: Node) {
     if (isRightMove) {
       this.audioController.playTapSfx();
-      // this.audioController.playYeahSfx();
+      this.audioController.playYeahSfx();
       if (
         this.busGroup.getCurrentBusColor() ===
         stickman.getComponent(StickmanController).stickmanColor
