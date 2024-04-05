@@ -91,12 +91,18 @@ export class Helper {
   }
 
   getRotationToBus(stickmanPos: Vec3, busPos: Vec3): Quat {
+    const sign = stickmanPos.x > busPos.x ? -1 : 1;
     const vec1 = new Vec2(busPos.x - stickmanPos.x, busPos.z - stickmanPos.z);
     const vec2 = new Vec2(0, 1);
 
     const angle = vec1.angle(vec2);
 
-    return Quat.fromEuler(new Quat(), 0, (angle / Math.PI + 1) * 180, 0);
+    return Quat.fromEuler(
+      new Quat(),
+      0,
+      ((sign * angle) / Math.PI + 1) * 180,
+      0
+    );
   }
 }
 
