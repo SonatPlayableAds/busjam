@@ -41,12 +41,12 @@ export class StickmanGroupController extends Component {
   start() {}
 
   update(deltaTime: number) {
-    this._cheerCounterTime += deltaTime;
+    // this._cheerCounterTime += deltaTime;
     this._happyCounterTime += deltaTime;
-    if (this._cheerCounterTime >= 4) {
-      this._cheerCounterTime = 0;
-      this.randomCheerStickman();
-    }
+    // if (this._cheerCounterTime >= 4) {
+    //   this._cheerCounterTime = 0;
+    //   this.randomCheerStickman();
+    // }
     if (this._happyCounterTime >= 4) {
       this._happyCounterTime = 0;
       this.randomHappyStickman();
@@ -242,6 +242,10 @@ export class StickmanGroupController extends Component {
     const flag = sameColor && this._numberOfStickmanOnBus < 3;
     if (flag) this._numberOfStickmanOnBus += 1;
     return flag;
+  }
+
+  isCurrentBusFilled() {
+    return this._numberOfStickmanOnBus >= 3;
   }
 
   resetStickmanOnBus() {
