@@ -238,6 +238,10 @@ export class StickmanGroupController extends Component {
     this.tutHand.active = false;
   }
 
+  isCurrentBusFilled() {
+    return this._numberOfStickmanOnBus >= 3;
+  }
+
   canRunToBus(sameColor: boolean, busGroupController: BusGroupController) {
     const flag = sameColor && this._numberOfStickmanOnBus < 3;
     if (flag) this._numberOfStickmanOnBus += 1;

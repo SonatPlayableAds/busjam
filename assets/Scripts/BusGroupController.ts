@@ -104,6 +104,10 @@ export class BusGroupController extends Component {
     });
   }
 
+  getNextBusColor() {
+    return this.buses[1].getComponent(BusController).busColor;
+  }
+
   getNumberOfStickman(): number {
     return this._currentBus
       .getComponent(BusController)
