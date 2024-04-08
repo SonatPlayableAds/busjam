@@ -83,18 +83,19 @@ export class GameController extends Component {
 
     this.loadMap();
     this.stickmanGroup.playTut(this._activatedMap);
-    playableHelper.gameStart();
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
   }
 
   update(deltaTime: number) {
-    if (!this.slotController.hasEmptySlot() && !this._isGameOver) {
+    if (this.checkGameOverCondition() && !this._isGameOver) {
       this.gameOver(false);
     }
 
     if (this._startCounting && !this._isGameOver) {
+      this.slotToBus();
+
       this._nonInteractTime += deltaTime;
 
       this._limitedTime -= deltaTime;
@@ -104,7 +105,6 @@ export class GameController extends Component {
       if (timer <= 10 && !this._playedAlarm) {
         this._playedAlarm = true;
         // this.audioController.playAlarmSfx();
-        // this.uiController.playWarning();
       }
 
       if (timer <= 0) {
@@ -133,11 +133,17 @@ export class GameController extends Component {
     );
     this.busGroup.spawnBuses(buses, this.stickmanMtl);
     this.wallGroup.spawnWalls(width, height, stickmans);
+    playableHelper.gameStart();
   }
 
   onTouchStart(event: EventTouch) {
     this._nonInteractTime = 0;
-    if (this.busGroup.movingBus || this._isGameOver) {
+
+    if (this._isGameOver) {
+      return;
+    }
+    if (!this.slotController.hasEmptySlot()) {
+      this.audioController.playUhohSfx();
       return;
     }
     this._startCounting = true;
@@ -209,11 +215,13 @@ export class GameController extends Component {
 
     for (let i = 0; i < this._queueStickman.length; i++) {
       const stickman = this._queueStickman[i];
+      const stickmanCtl = stickman.getComponent(StickmanController);
       if (
-        stickman.getComponent(StickmanController).stickmanColor === busColor &&
-        stickman.name === "Stickman"
+        stickmanCtl.stickmanColor === busColor &&
+        stickman.name === "Stickman" &&
+        stickmanCtl.onSlot
       ) {
-        slotIndex.push(i);
+        slotIndex.push(stickmanCtl.slotIndex);
         availableOnQueueStickman.push(stickman);
         if (availableOnQueueStickman.length === 3) {
           break;
@@ -227,7 +235,9 @@ export class GameController extends Component {
         if (
           stickman.name === "Stickman" &&
           lengthCounter < 3 &&
-          stickman.getComponent(StickmanController).stickmanColor === busColor
+          stickman.getComponent(StickmanController).stickmanColor ===
+            busColor &&
+          stickman.getComponent(StickmanController).onSlot
         ) {
           lengthCounter++;
           this.slotController.availableSlots[
@@ -249,10 +259,59 @@ export class GameController extends Component {
     }
   }
 
+  slotToBus() {
+    if (this._queueStickman.length === 0) {
+      return;
+    }
+
+    const currentBusColor = this.busGroup.getCurrentBusColor();
+
+    const availableOnQueueStickman = [];
+
+    for (let i = 0; i < this._queueStickman.length; i++) {
+      const stickman = this._queueStickman[i];
+      const stickmanCtl = stickman.getComponent(StickmanController);
+      if (
+        stickmanCtl.stickmanColor === currentBusColor &&
+        stickman.name === "Stickman" &&
+        stickmanCtl.onSlot &&
+        this.stickmanGroup._numberOfStickmanOnBus < 3
+      ) {
+        availableOnQueueStickman.push(stickman);
+        this.stickmanGroup._numberOfStickmanOnBus++;
+        stickmanCtl.onSlot = false;
+        if (this.stickmanGroup._numberOfStickmanOnBus >= 3) {
+          break;
+        }
+      }
+    }
+
+    if (availableOnQueueStickman.length > 0) {
+      this._queueStickman = this._queueStickman.filter((stickman) => {
+        if (
+          stickman.name === "Stickman" &&
+          availableOnQueueStickman.indexOf(stickman) > -1
+        ) {
+          this.slotController.availableSlots[
+            stickman.getComponent(StickmanController).slotIndex
+          ] = true;
+          return false;
+        }
+
+        return true;
+      });
+
+      availableOnQueueStickman.forEach((stickman) => {
+        const stickmanController = stickman.getComponent(StickmanController);
+        stickmanController.fromQueueToBus(this.busGroup);
+      });
+    }
+  }
+
   playPickStickmanAudio(isRightMove: boolean, stickman: Node) {
     if (isRightMove) {
-      this.audioController.playTapSfx();
-      // this.audioController.playYeahSfx();
+      // this.audioController.playTapSfx();
+      this.audioController.playYeahSfx();
       if (
         this.busGroup.getCurrentBusColor() ===
         stickman.getComponent(StickmanController).stickmanColor
@@ -265,6 +324,7 @@ export class GameController extends Component {
         this._isGoodMove = false;
       }
     } else {
+      // this.uiController.playWarning();
       this.audioController.playUhohSfx();
     }
   }
@@ -283,6 +343,29 @@ export class GameController extends Component {
     const realHeight = windowSize.height / pixelRatio;
 
     this.uiController.updateWarnField(realWidth, realHeight);
+  }
+
+  checkGameOverCondition(): boolean {
+    if (this.busGroup.movingBus) {
+      return false;
+    }
+    const hasSlot = this.slotController.hasEmptySlot();
+
+    if (!hasSlot) {
+      const nextBusAvail = this._queueStickman.some(
+        (stickman) =>
+          stickman.getComponent(StickmanController).stickmanColor ===
+          this.busGroup.getNextBusColor()
+      );
+
+      if (nextBusAvail) {
+        return !this.stickmanGroup.isCurrentBusFilled();
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   gameOver(isWin: boolean) {

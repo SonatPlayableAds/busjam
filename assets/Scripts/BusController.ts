@@ -22,16 +22,15 @@ export class BusController extends Component {
   @property(CCString)
   public busColor: string = "";
 
+  private availableSeats: number = 0;
+
   private _animationController = null;
-  private _variables;
   private _stickmansOnBus: Node[] = [];
 
   start() {
     this._animationController = this.getComponent(
       animation.AnimationController
     );
-
-    this._variables = this._animationController.getVariables();
 
     let collider = this.node.getComponent(Collider);
     collider.on(
@@ -83,6 +82,10 @@ export class BusController extends Component {
         this.node.destroy();
       })
       .start();
+  }
+
+  updateSeats() {
+    this.availableSeats += 1;
   }
 
   checkRunCondition() {

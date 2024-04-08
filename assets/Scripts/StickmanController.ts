@@ -36,11 +36,17 @@ export class StickmanController extends Component {
   @property(CCString)
   public stickmanColor: string = "";
 
+  @property(BusGroupController)
+  public busGroupController: BusGroupController = null;
+
   public slotIndex: number = -1;
   public doNothing = true;
   public canPick: boolean = true;
 
+  public shouldRunToBus: boolean = false;
+
   public _animationController: animation.AnimationController = null;
+  public onSlot: boolean = false;
 
   start() {
     this._animationController = this.getComponent(
@@ -164,6 +170,10 @@ export class StickmanController extends Component {
       return;
     }
 
+    if (!canRunToBus) {
+      this.slotIndex = availableSlotIndex;
+    }
+
     const moves = helper.calculateMoves(path);
     const movesTween = tween(this.node);
     const prevPoint = new Vec3(this.matrixPos.x, 0, this.matrixPos.y);
@@ -277,6 +287,7 @@ export class StickmanController extends Component {
     const slotWorldPos = slot.getWorldPosition();
     this._animationController.setValue("Running", true);
     this._animationController.setValue("Cheer", false);
+    this.slotIndex = availableSlotIndex;
 
     const runToSlotTween = tween(this.node)
       .to(
@@ -288,7 +299,7 @@ export class StickmanController extends Component {
           easing: "sineIn",
           onComplete: () => {
             this._animationController.setValue("Running", false);
-            this.slotIndex = availableSlotIndex;
+            this.onSlot = true;
           },
         }
       )

@@ -411,7 +411,7 @@
     "_enabled": true,
     "__prefab": null,
     "_clip": {
-      "__uuid__": "599b1eb0-82e8-4d4a-abbd-49dd217d8a88",
+      "__uuid__": "d1426277-f6e5-4e40-9d72-4b444d7ac04d",
       "__expectedType__": "cc.AudioClip"
     },
     "_loop": false,
@@ -794,6 +794,7 @@
     "busRunSfx": {
       "__id__": 16
     },
+    "alarmSfx": null,
     "loseSfx": {
       "__id__": 20
     },
@@ -3825,7 +3826,6 @@
     "praseText": {
       "__id__": 39
     },
-    "playBtn": null,
     "_id": "6f381E57lMC5wrwlZmdp2f"
   },
   {
