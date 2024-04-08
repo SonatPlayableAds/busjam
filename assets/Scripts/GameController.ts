@@ -105,6 +105,7 @@ export class GameController extends Component {
       if (timer <= 10 && !this._playedAlarm) {
         this._playedAlarm = true;
         this.audioController.playAlarmSfx();
+        this.uiController.playWarning();
       }
 
       if (timer <= 0) {
@@ -129,9 +130,9 @@ export class GameController extends Component {
       width,
       height,
       stickmans,
-      this.stickmanMtl
+      this.busMtl
     );
-    this.busGroup.spawnBuses(buses, this.stickmanMtl);
+    this.busGroup.spawnBuses(buses, this.busMtl);
     this.wallGroup.spawnWalls(width, height, stickmans);
     playableHelper.gameStart();
   }
@@ -324,7 +325,7 @@ export class GameController extends Component {
         this._isGoodMove = false;
       }
     } else {
-      this.uiController.playWarning();
+      // this.uiController.playWarning();
       this.audioController.playUhohSfx();
     }
   }
