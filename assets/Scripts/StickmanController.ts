@@ -36,11 +36,17 @@ export class StickmanController extends Component {
   @property(CCString)
   public stickmanColor: string = "";
 
+  @property(BusGroupController)
+  public busGroupController: BusGroupController = null;
+
   public slotIndex: number = -1;
   public doNothing = true;
   public canPick: boolean = true;
 
+  public shouldRunToBus: boolean = false;
+
   public _animationController: animation.AnimationController = null;
+  public onSlot: boolean = false;
 
   start() {
     this._animationController = this.getComponent(
@@ -50,7 +56,12 @@ export class StickmanController extends Component {
     this.node.setRotationFromEuler(new Vec3(0, 180, 0));
   }
 
-  update(deltaTime: number) {}
+  update(deltaTime: number) {
+    if (this.shouldRunToBus) {
+      this.shouldRunToBus = false;
+      this.fromQueueToBus(this.busGroupController);
+    }
+  }
 
   applyMtl(mtl: Material) {
     const char = this.node.getChildByName("Char");
@@ -293,6 +304,7 @@ export class StickmanController extends Component {
           easing: "sineIn",
           onComplete: () => {
             this._animationController.setValue("Running", false);
+            this.onSlot = true;
           },
         }
       )

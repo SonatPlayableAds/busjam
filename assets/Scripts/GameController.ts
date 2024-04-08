@@ -92,7 +92,10 @@ export class GameController extends Component {
     if (this.checkGameOverCondition() && !this._isGameOver) {
       this.gameOver(false);
     }
+
     if (this._startCounting && !this._isGameOver) {
+      this.slotToBus();
+
       this._nonInteractTime += deltaTime;
 
       this._limitedTime -= deltaTime;
@@ -215,7 +218,8 @@ export class GameController extends Component {
       const stickmanCtl = stickman.getComponent(StickmanController);
       if (
         stickmanCtl.stickmanColor === busColor &&
-        stickman.name === "Stickman"
+        stickman.name === "Stickman" &&
+        stickmanCtl.onSlot
       ) {
         slotIndex.push(stickmanCtl.slotIndex);
         availableOnQueueStickman.push(stickman);
@@ -231,7 +235,9 @@ export class GameController extends Component {
         if (
           stickman.name === "Stickman" &&
           lengthCounter < 3 &&
-          stickman.getComponent(StickmanController).stickmanColor === busColor
+          stickman.getComponent(StickmanController).stickmanColor ===
+            busColor &&
+          stickman.getComponent(StickmanController).onSlot
         ) {
           lengthCounter++;
           this.slotController.availableSlots[
@@ -245,6 +251,55 @@ export class GameController extends Component {
 
       this.stickmanGroup._numberOfStickmanOnBus +=
         availableOnQueueStickman.length;
+
+      availableOnQueueStickman.forEach((stickman) => {
+        const stickmanController = stickman.getComponent(StickmanController);
+        stickmanController.fromQueueToBus(this.busGroup);
+      });
+    }
+  }
+
+  slotToBus() {
+    if (this._queueStickman.length === 0) {
+      return;
+    }
+
+    const currentBusColor = this.busGroup.getCurrentBusColor();
+
+    const availableOnQueueStickman = [];
+
+    for (let i = 0; i < this._queueStickman.length; i++) {
+      const stickman = this._queueStickman[i];
+      const stickmanCtl = stickman.getComponent(StickmanController);
+      if (
+        stickmanCtl.stickmanColor === currentBusColor &&
+        stickman.name === "Stickman" &&
+        stickmanCtl.onSlot &&
+        this.stickmanGroup._numberOfStickmanOnBus < 3
+      ) {
+        availableOnQueueStickman.push(stickman);
+        this.stickmanGroup._numberOfStickmanOnBus++;
+        stickmanCtl.onSlot = false;
+        if (this.stickmanGroup._numberOfStickmanOnBus >= 3) {
+          break;
+        }
+      }
+    }
+
+    if (availableOnQueueStickman.length > 0) {
+      this._queueStickman = this._queueStickman.filter((stickman) => {
+        if (
+          stickman.name === "Stickman" &&
+          availableOnQueueStickman.indexOf(stickman) > -1
+        ) {
+          this.slotController.availableSlots[
+            stickman.getComponent(StickmanController).slotIndex
+          ] = true;
+          return false;
+        }
+
+        return true;
+      });
 
       availableOnQueueStickman.forEach((stickman) => {
         const stickmanController = stickman.getComponent(StickmanController);
