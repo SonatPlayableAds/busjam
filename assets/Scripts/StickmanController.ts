@@ -176,16 +176,21 @@ export class StickmanController extends Component {
 
     const moves = helper.calculateMoves(path);
     const movesTween = tween(this.node);
-    const prevPoint = new Vec3(this.matrixPos.x, 0, this.matrixPos.y);
+    let prevPoint = new Vec3(this.matrixPos.x, 0, this.matrixPos.y);
     this.node.setRotationFromEuler(new Vec3(0, moves[0].rotation, 0));
     this._animationController.setValue("Running", true);
     this.doNothing = false;
 
+    console.log("\n");
+
     moves.forEach((move, index) => {
+      console.log("move", move);
       const endPoint = new Vec3(move.destination.x, 0, move.destination.y);
       const distance = Vec3.distance(prevPoint, endPoint);
+      console.log("distance", distance, prevPoint, endPoint);
       const rotation = new Quat();
       endPoint.subtract(toOriginVector);
+      prevPoint = new Vec3(move.destination.x, 0, move.destination.y);
 
       Quat.fromEuler(rotation, 0, move.rotation, 0);
       movesTween
