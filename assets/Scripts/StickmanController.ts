@@ -56,12 +56,7 @@ export class StickmanController extends Component {
     this.node.setRotationFromEuler(new Vec3(0, 180, 0));
   }
 
-  update(deltaTime: number) {
-    if (this.shouldRunToBus) {
-      this.shouldRunToBus = false;
-      this.fromQueueToBus(this.busGroupController);
-    }
-  }
+  update(deltaTime: number) {}
 
   applyMtl(mtl: Material) {
     const char = this.node.getChildByName("Char");
