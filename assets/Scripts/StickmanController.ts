@@ -181,13 +181,9 @@ export class StickmanController extends Component {
     this._animationController.setValue("Running", true);
     this.doNothing = false;
 
-    console.log("\n");
-
     moves.forEach((move, index) => {
-      console.log("move", move);
       const endPoint = new Vec3(move.destination.x, 0, move.destination.y);
       const distance = Vec3.distance(prevPoint, endPoint);
-      console.log("distance", distance, prevPoint, endPoint);
       const rotation = new Quat();
       endPoint.subtract(toOriginVector);
       prevPoint = new Vec3(move.destination.x, 0, move.destination.y);
