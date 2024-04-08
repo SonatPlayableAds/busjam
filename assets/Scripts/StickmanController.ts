@@ -164,6 +164,10 @@ export class StickmanController extends Component {
       return;
     }
 
+    if (canRunToBus) {
+      this.slotIndex = availableSlotIndex;
+    }
+
     const moves = helper.calculateMoves(path);
     const movesTween = tween(this.node);
     const prevPoint = new Vec3(this.matrixPos.x, 0, this.matrixPos.y);
@@ -277,6 +281,7 @@ export class StickmanController extends Component {
     const slotWorldPos = slot.getWorldPosition();
     this._animationController.setValue("Running", true);
     this._animationController.setValue("Cheer", false);
+    this.slotIndex = availableSlotIndex;
 
     const runToSlotTween = tween(this.node)
       .to(
@@ -288,7 +293,6 @@ export class StickmanController extends Component {
           easing: "sineIn",
           onComplete: () => {
             this._animationController.setValue("Running", false);
-            this.slotIndex = availableSlotIndex;
           },
         }
       )
