@@ -1,4 +1,5 @@
 import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from "cc";
+import { StickmanController } from "./StickmanController";
 const { ccclass, property } = _decorator;
 
 @ccclass("SlotGroupController")
@@ -34,6 +35,8 @@ export class SlotGroupController extends Component {
   }
 
   hasEmptySlot(): boolean {
-    return this.availableSlots.some((slot) => slot);
+    const slotChecker = this.availableSlots.some((slot) => slot);
+
+    return slotChecker;
   }
 }

@@ -77,8 +77,20 @@ export class BusGroupController extends Component {
     return this._currentBus.getComponent(BusController).busColor;
   }
 
+  getNextBusColor(): string {
+    return this.buses[1].getComponent(BusController).busColor;
+  }
+
+  isCurrentBusCanRun() {
+    return this._currentBus.getComponent(BusController).checkRunCondition();
+  }
+
   onStickmanEnterBus(stickman: Node) {
     this._currentBus.getComponent(BusController).onStickmanEnter(stickman);
+  }
+
+  updateCurrentBusSeats() {
+    this._currentBus.getComponent(BusController).updateSeats();
   }
 
   shiftBuses(gameController: GameController) {

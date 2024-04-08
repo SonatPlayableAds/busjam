@@ -89,10 +89,9 @@ export class GameController extends Component {
   }
 
   update(deltaTime: number) {
-    if (!this.slotController.hasEmptySlot() && !this._isGameOver) {
+    if (this.checkGameOverCondition() && !this._isGameOver) {
       this.gameOver(false);
     }
-
     if (this._startCounting && !this._isGameOver) {
       this._nonInteractTime += deltaTime;
 
@@ -136,7 +135,12 @@ export class GameController extends Component {
 
   onTouchStart(event: EventTouch) {
     this._nonInteractTime = 0;
-    if (this.busGroup.movingBus || this._isGameOver) {
+
+    if (this._isGameOver) {
+      return;
+    }
+    if (!this.slotController.hasEmptySlot()) {
+      this.audioController.playUhohSfx();
       return;
     }
     this._startCounting = true;
@@ -208,11 +212,12 @@ export class GameController extends Component {
 
     for (let i = 0; i < this._queueStickman.length; i++) {
       const stickman = this._queueStickman[i];
+      const stickmanCtl = stickman.getComponent(StickmanController);
       if (
-        stickman.getComponent(StickmanController).stickmanColor === busColor &&
+        stickmanCtl.stickmanColor === busColor &&
         stickman.name === "Stickman"
       ) {
-        slotIndex.push(i);
+        slotIndex.push(stickmanCtl.slotIndex);
         availableOnQueueStickman.push(stickman);
         if (availableOnQueueStickman.length === 3) {
           break;
@@ -283,6 +288,29 @@ export class GameController extends Component {
     const realHeight = windowSize.height / pixelRatio;
 
     this.uiController.updateWarnField(realWidth, realHeight);
+  }
+
+  checkGameOverCondition(): boolean {
+    if (this.busGroup.movingBus) {
+      return false;
+    }
+    const hasSlot = this.slotController.hasEmptySlot();
+
+    if (!hasSlot) {
+      const nextBusAvail = this._queueStickman.some(
+        (stickman) =>
+          stickman.getComponent(StickmanController).stickmanColor ===
+          this.busGroup.getNextBusColor()
+      );
+
+      if (nextBusAvail) {
+        return !this.stickmanGroup.isCurrentBusFilled();
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   gameOver(isWin: boolean) {

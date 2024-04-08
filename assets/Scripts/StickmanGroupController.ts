@@ -244,6 +244,10 @@ export class StickmanGroupController extends Component {
     return flag;
   }
 
+  isCurrentBusFilled() {
+    return this._numberOfStickmanOnBus >= 3;
+  }
+
   resetStickmanOnBus() {
     this._numberOfStickmanOnBus = 0;
   }

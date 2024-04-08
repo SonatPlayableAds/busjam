@@ -83,7 +83,6 @@ export class UIController extends Component {
   }
 
   showEndCard(isWin: boolean) {
-    // console.log(isWin);
     this.hidePlayBtn();
     if (isWin) {
       this.winEndCard.active = true;
