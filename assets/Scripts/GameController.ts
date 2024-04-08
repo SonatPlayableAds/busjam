@@ -102,7 +102,7 @@ export class GameController extends Component {
       const timer = Math.round(this._limitedTime);
       this.uiController.updateCounter(timer);
 
-      if (timer <= 10 && !this._playedAlarm) {
+      if (timer <= 3 && !this._playedAlarm) {
         this._playedAlarm = true;
         this.audioController.playAlarmSfx();
         this.uiController.playWarning();
