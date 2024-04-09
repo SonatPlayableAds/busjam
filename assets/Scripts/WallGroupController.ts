@@ -90,6 +90,8 @@ export class WallGroupController extends Component {
           result.rotation = 90;
           break;
       }
+    } else if (wall === -12) {
+      result.type = WALL_TYPE.WALL_BRICK;
     }
 
     return result;
@@ -178,16 +180,25 @@ export class WallGroupController extends Component {
       for (let x = 0; x < width; x++) {
         if (x === 0) {
           if (y !== 0) {
-            const wallPrefab = this.wallPrefabs[WALL_TYPE.EDGE_BRICK];
+            const wallPrefab =
+              stickmanMap[y][x] >= 0
+                ? this.wallPrefabs[WALL_TYPE.EDGE_BRICK]
+                : this.wallPrefabs[WALL_TYPE.WALL_BRICK];
             const wallNode = instantiate(wallPrefab);
             wallNode.setRotationFromEuler(0, 90, 0);
             this.node.addChild(wallNode);
             const position = new Vec3(x - 1, 0, y);
             wallNode.setPosition(position.subtract(this._toOriginVector));
           } else {
-            const wallPrefab = this.wallPrefabs[WALL_TYPE.CORNER_OUT];
+            const wallPrefab =
+              stickmanMap[0][0] >= 0
+                ? this.wallPrefabs[WALL_TYPE.CORNER_OUT]
+                : this.wallPrefabs[WALL_TYPE.EDGE_BRICK];
             const wallNode = instantiate(wallPrefab);
-            wallNode.setRotationFromEuler(0, 90, 0);
+
+            stickmanMap[0][0] >= 0
+              ? wallNode.setRotationFromEuler(0, 90, 0)
+              : "";
             this.node.addChild(wallNode);
             const position = new Vec3(x - 1, 0, y);
             wallNode.setPosition(position.subtract(this._toOriginVector));
@@ -196,16 +207,25 @@ export class WallGroupController extends Component {
 
         if (x === width - 1) {
           if (y !== 0) {
-            const wallPrefab = this.wallPrefabs[WALL_TYPE.EDGE_BRICK];
+            const wallPrefab =
+              stickmanMap[y][x] >= 0
+                ? this.wallPrefabs[WALL_TYPE.EDGE_BRICK]
+                : this.wallPrefabs[WALL_TYPE.WALL_BRICK];
             const wallNode = instantiate(wallPrefab);
             wallNode.setRotationFromEuler(0, -90, 0);
             this.node.addChild(wallNode);
             const position = new Vec3(x + 1, 0, y);
             wallNode.setPosition(position.subtract(this._toOriginVector));
           } else {
-            const wallPrefab = this.wallPrefabs[WALL_TYPE.CORNER_OUT];
+            const wallPrefab =
+              stickmanMap[y][x] >= 0
+                ? this.wallPrefabs[WALL_TYPE.CORNER_OUT]
+                : this.wallPrefabs[WALL_TYPE.EDGE_BRICK];
             const wallNode = instantiate(wallPrefab);
-            wallNode.setRotationFromEuler(0, 180, 0);
+            stickmanMap[y][x] >= 0
+              ? wallNode.setRotationFromEuler(0, 180, 0)
+              : "";
+
             this.node.addChild(wallNode);
             const position = new Vec3(x + 1, 0, y);
             wallNode.setPosition(position.subtract(this._toOriginVector));
@@ -213,7 +233,10 @@ export class WallGroupController extends Component {
         }
 
         if (y === height - 1) {
-          const wallPrefab = this.wallPrefabs[WALL_TYPE.EDGE_BRICK];
+          const wallPrefab =
+            stickmanMap[y][x] >= 0
+              ? this.wallPrefabs[WALL_TYPE.EDGE_BRICK]
+              : this.wallPrefabs[WALL_TYPE.WALL_BRICK];
           const wallNode = instantiate(wallPrefab);
           this.node.addChild(wallNode);
           const position = new Vec3(x, 0, y + 1);
@@ -281,6 +304,7 @@ export class WallGroupController extends Component {
       position.subtract(this._toOriginVector).subtract(subtractToOriginVec)
     );
   }
+
   spawnTopRightEdge(width: number, height: number) {
     const wallPrefab = this.wallPrefabs[WALL_TYPE.EDGE_BRICK];
     const wallNode = instantiate(wallPrefab);
