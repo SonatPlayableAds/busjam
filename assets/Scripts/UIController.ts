@@ -14,9 +14,6 @@ const { ccclass, property } = _decorator;
 @ccclass("UIController")
 export class UIController extends Component {
   @property(Node)
-  public timeCounterLabel: Node = null!;
-
-  @property(Node)
   public endCardWrapper: Node = null!;
 
   @property(Node)
@@ -26,13 +23,13 @@ export class UIController extends Component {
   public loseEndCard: Node = null!;
 
   @property(Node)
-  public warn: Node = null!;
-
-  @property(Node)
   public tutorial: Node = null!;
 
   @property(Node)
   public praseText: Node = null!;
+
+  @property(Node)
+  public levelCompletedCard: Node = null!;
 
   private _isHideTutorial = false;
 
@@ -40,15 +37,16 @@ export class UIController extends Component {
     this.endCardWrapper.scale = new Vec3(0, 0, 0);
     this.loseEndCard.active = false;
     this.winEndCard.active = false;
+    this.levelCompletedCard.active = false;
   }
 
   update(deltaTime: number) {}
 
-  updateCounter(time: number) {
-    const timeInString = `00:${time < 10 ? `0${time}` : time}`;
+  // updateCounter(time: number) {
+  //   const timeInString = `00:${time < 10 ? `0${time}` : time}`;
 
-    this.timeCounterLabel.getComponent(Label).string = timeInString;
-  }
+  //   this.timeCounterLabel.getComponent(Label).string = timeInString;
+  // }
 
   popPraiseText() {
     const praiseTexts = ["Great!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
@@ -64,10 +62,10 @@ export class UIController extends Component {
       .start();
   }
 
-  playWarning() {
-    const anim = this.warn.getComponent(Animation);
-    anim.play("warn");
-  }
+  // playWarning() {
+  //   const anim = this.warn.getComponent(Animation);
+  //   anim.play("warn");
+  // }
 
   hideTutorial() {
     if (this._isHideTutorial) return;
@@ -87,43 +85,5 @@ export class UIController extends Component {
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
       .union()
       .start();
-  }
-
-  updateWarnField(realWidth: number, realHeight: number) {
-    // const topNode = this.warn.getChildByName("Top")!;
-    // const bottomNode = this.warn.getChildByName("Bot")!;
-    const leftNode = this.warn.getChildByName("Left")!;
-    const rightNode = this.warn.getChildByName("Right")!;
-
-    if (leftNode && rightNode) {
-      // topNode.setPosition(
-      //   0,
-      //   realHeight / 2 +
-      //     topNode.getComponent(UITransform).contentSize.height / 2 -
-      //     70,
-      //   0
-      // );
-      // bottomNode.setPosition(
-      //   0,
-      //   -realHeight / 2 -
-      //     bottomNode.getComponent(UITransform).contentSize.height / 2 +
-      //     70,
-      //   0
-      // );
-      leftNode.setPosition(
-        -realWidth / 2 -
-          leftNode.getComponent(UITransform).contentSize.width / 2 +
-          70,
-        0,
-        0
-      );
-      rightNode.setPosition(
-        realWidth / 2 +
-          leftNode.getComponent(UITransform).contentSize.width / 2 -
-          70,
-        0,
-        0
-      );
-    }
   }
 }

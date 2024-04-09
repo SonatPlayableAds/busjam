@@ -81,7 +81,7 @@ export class GameController extends Component {
     const visible: Size = screen.windowSize;
     this.updateWarnField();
 
-    this.loadMap();
+    this.loadMap(true);
     this.stickmanGroup.playTut(this._activatedMap);
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
@@ -100,13 +100,13 @@ export class GameController extends Component {
 
       this._limitedTime -= deltaTime;
       const timer = Math.round(this._limitedTime);
-      this.uiController.updateCounter(timer);
+      // this.uiController.updateCounter(timer);
 
-      if (timer <= 10 && !this._playedAlarm) {
-        this._playedAlarm = true;
-        this.audioController.playAlarmSfx();
-        this.uiController.playWarning();
-      }
+      // if (timer <= 10 && !this._playedAlarm) {
+      // this._playedAlarm = true;
+      // this.audioController.playAlarmSfx();
+      // this.uiController.playWarning();
+      // }
 
       if (timer <= 0) {
         this._startCounting = false;
@@ -120,9 +120,17 @@ export class GameController extends Component {
     }
   }
 
-  loadMap() {
+  loadMap(firstLoad: boolean) {
     const mapObject = JSON.parse(this.map);
-    const { width, height, time, buses, stickmans, slots } = mapObject;
+    let mapData: any = {};
+
+    if (firstLoad) {
+      mapData = mapObject["phase_1"];
+    } else {
+      mapData = mapObject["phase_2"];
+    }
+
+    const { width, height, time, buses, stickmans, slots } = mapData;
     this._limitedTime = time;
 
     this.slotController.spawnSlots(slots);
@@ -342,7 +350,7 @@ export class GameController extends Component {
     const realWidth = windowSize.width / pixelRatio;
     const realHeight = windowSize.height / pixelRatio;
 
-    this.uiController.updateWarnField(realWidth, realHeight);
+    // this.uiController.updateWarnField(realWidth, realHeight);
   }
 
   checkGameOverCondition(): boolean {
