@@ -36,4 +36,13 @@ export class SlotGroupController extends Component {
   hasEmptySlot(): boolean {
     return this.availableSlots.some((slot) => slot);
   }
+
+  removeSlots() {
+    this.slots.forEach((slot) => {
+      slot.removeFromParent();
+      slot.destroy();
+    });
+    this.slots = [];
+    this.availableSlots = [];
+  }
 }

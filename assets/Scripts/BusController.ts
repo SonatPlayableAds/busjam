@@ -58,7 +58,7 @@ export class BusController extends Component {
     }, 0.1);
   }
 
-  onStickmanEnter(stickman: Node) {
+  onStickmanEnter(stickman: Node, audioController: any) {
     stickman.setParent(this.node);
     stickman
       .getComponent(animation.AnimationController)
@@ -67,6 +67,7 @@ export class BusController extends Component {
     stickman.setRotationFromEuler(new Vec3(0, 90, 0));
     this._stickmansOnBus.push(stickman);
 
+    audioController.playPopSfx();
     tween(stickman)
       .to(0.3, { scale: new Vec3(0.036, 0.036, 0.036) })
       .union()

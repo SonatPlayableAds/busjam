@@ -26,7 +26,8 @@ export interface Move {
   rotation: number;
 }
 
-const RUN_THROUGH_TIME = 0.1;
+const RUN_THROUGH_TIME = 0.15;
+const HATED_EMOJI_SCALE = new Vec3(0.05, 0.05, 0.05);
 
 @ccclass("StickmanController")
 export class StickmanController extends Component {
@@ -36,8 +37,8 @@ export class StickmanController extends Component {
   @property(CCString)
   public stickmanColor: string = "";
 
-  @property(BusGroupController)
-  public busGroupController: BusGroupController = null;
+  @property(Node)
+  public hatedEmoji: Node = null!;
 
   public slotIndex: number = -1;
   public doNothing = true;
@@ -52,6 +53,7 @@ export class StickmanController extends Component {
     this._animationController = this.getComponent(
       animation.AnimationController
     );
+    this.hatedEmoji.setScale(new Vec3(0, 0, 0));
 
     this.node.setRotationFromEuler(new Vec3(0, 180, 0));
   }
@@ -204,10 +206,10 @@ export class StickmanController extends Component {
           }
         )
         .call(() => {
-          if (index + 1 < moves.length - 1)
-            this.node.setRotationFromEuler(
-              new Vec3(0, moves[index + 1].rotation, 0)
-            );
+          // if (index + 1 < moves.length - 1)
+          //   this.node.setRotationFromEuler(
+          //     new Vec3(0, moves[index + 1].rotation, 0)
+          //   );
         });
     });
     movesTween.call(() => {
@@ -256,17 +258,13 @@ export class StickmanController extends Component {
       this.node.getWorldPosition(),
       busGroupCtl.node.getWorldPosition()
     );
+    this.node.setRotation(rotationToBus);
     // const runningTrigger = this._animationController.getValue("Running");
     this._animationController.setValue("Running", true);
     const runToBusTween = tween(this.node)
-      .to(0.1, { rotation: rotationToBus })
-      .to(
-        0.8,
-        {
-          position: BUS_POS,
-        },
-        { easing: "sineIn" }
-      )
+      .to(0.5, {
+        position: BUS_POS,
+      })
       .to(
         0.2,
         { scale: new Vec3(0, 0, 0) },
@@ -297,7 +295,6 @@ export class StickmanController extends Component {
           worldPosition: slotWorldPos,
         },
         {
-          easing: "sineIn",
           onComplete: () => {
             this._animationController.setValue("Running", false);
             this.onSlot = true;
@@ -323,5 +320,14 @@ export class StickmanController extends Component {
     this.scheduleOnce(() => {
       this._animationController.setValue("Happy", false);
     }, 3);
+  }
+
+  popWrongEmoji() {
+    tween(this.hatedEmoji)
+      .to(0.2, { scale: HATED_EMOJI_SCALE }, { easing: "quartIn" })
+      .delay(0.4)
+      .to(0.2, { scale: new Vec3(0, 0, 0) }, { easing: "quartOut" })
+      .union()
+      .start();
   }
 }

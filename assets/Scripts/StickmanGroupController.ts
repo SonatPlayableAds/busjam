@@ -59,6 +59,7 @@ export class StickmanGroupController extends Component {
     map: number[][],
     stickmanMaterials: Material[]
   ) {
+    this._numberOfStickmanOnBus = 0;
     this._toOriginVector = new Vec3(width / 2 - 0.5, 0, 0);
     const activatedMap: number[][] = [[]];
     for (let i = 0; i < height; i++) {
@@ -89,6 +90,7 @@ export class StickmanGroupController extends Component {
           activatedMap[y][x] = 1;
           const stickmanMapIndex = map[y][x] - 1;
           const newStickman = instantiate(this.stickmanPrefab);
+
           const currentMtl = stickmanMaterials[stickmanMapIndex];
           this.node.addChild(newStickman);
 
@@ -250,5 +252,14 @@ export class StickmanGroupController extends Component {
 
   resetStickmanOnBus() {
     this._numberOfStickmanOnBus = 0;
+  }
+
+  removeStickmans() {
+    this.stickmans.forEach((stickman) => {
+      stickman.removeFromParent();
+      stickman.destroy();
+    });
+
+    this.stickmans = [];
   }
 }

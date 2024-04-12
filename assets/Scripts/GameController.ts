@@ -9,6 +9,7 @@ import {
   input,
   Material,
   Node,
+  ParticleSystem,
   PhysicsSystem,
   screen,
   Size,
@@ -29,6 +30,9 @@ const { ccclass, property } = _decorator;
 
 @ccclass("GameController")
 export class GameController extends Component {
+  @property({ type: ParticleSystem })
+  public particleSystem: ParticleSystem = null!;
+
   @property({ type: Camera })
   public cameraComponent: Camera = null!;
 
@@ -62,13 +66,17 @@ export class GameController extends Component {
   private _activatedMap: number[][] = [[]];
   private _ray: geometry.Ray = new geometry.Ray();
   private _queueStickman: Node[] = [];
-  private _limitedTime: number = 0;
   private _startCounting: boolean = false;
   private _isGameOver: boolean = false;
   private _isGoodMove: boolean = false;
-  private _playedAlarm: boolean = false;
-  private _nonInteractTime: number = 0;
+  private _playedChallengeText: boolean = false;
   private _playedTut: boolean = false;
+  private _toShowChallengeTextTime: number = 0;
+  private _nonInteractTime: number = 0;
+  private _limitedTime: number = 0;
+
+  private _phase: number = 1;
+  private _isShowedCard: boolean = false;
 
   start() {
     const androidUrl =
@@ -78,10 +86,10 @@ export class GameController extends Component {
 
     playableHelper.setStoreUrl(iosUrl, androidUrl);
 
-    const visible: Size = screen.windowSize;
-    this.updateWarnField();
+    // this.updateWarnField();
+    this.uiController.showCallToPlay();
 
-    this.loadMap(true);
+    this.loadMap();
     this.stickmanGroup.playTut(this._activatedMap);
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
@@ -95,11 +103,16 @@ export class GameController extends Component {
 
     if (this._startCounting && !this._isGameOver) {
       this.slotToBus();
+      if (this.busGroup.winRound && !this._isShowedCard) {
+        if (this._phase === 1) {
+          this.activateWinPhase1();
+          this.uiController.hideBanner();
+          this._isShowedCard = true;
+        } else {
+          this.gameOver(true);
+        }
+      }
 
-      this._nonInteractTime += deltaTime;
-
-      this._limitedTime -= deltaTime;
-      const timer = Math.round(this._limitedTime);
       // this.uiController.updateCounter(timer);
 
       // if (timer <= 10 && !this._playedAlarm) {
@@ -108,27 +121,66 @@ export class GameController extends Component {
       // this.uiController.playWarning();
       // }
 
-      if (timer <= 0) {
-        this._startCounting = false;
-        this.gameOver(false);
-      }
+      if (!this._isShowedCard) {
+        this._nonInteractTime += deltaTime;
+        this._toShowChallengeTextTime += deltaTime;
+        this._limitedTime -= deltaTime;
+        const timer = Math.round(this._limitedTime);
 
-      if (this._nonInteractTime >= 3 && !this._playedTut) {
-        this._playedTut = true;
-        this.stickmanGroup.playTut(this._activatedMap);
+        if (timer <= 0) {
+          this._startCounting = false;
+          this.gameOver(false);
+        }
+
+        if (
+          this._nonInteractTime >= 0.5 &&
+          !this._playedTut &&
+          !this.busGroup.movingBus
+        ) {
+          this._playedTut = true;
+          this.stickmanGroup.playTut(this._activatedMap);
+        }
+
+        if (this._toShowChallengeTextTime >= 3 && !this._playedChallengeText) {
+          this.uiController.showChallengeText();
+        }
+
+        if (this._nonInteractTime >= 15) {
+          this.gameOver(false);
+        }
       }
     }
   }
 
-  loadMap(firstLoad: boolean) {
-    const mapObject = JSON.parse(this.map);
-    let mapData: any = {};
+  loadPhase2() {
+    this._phase = 2;
+    this.uiController.hideLevelCompletedCard();
+    this.stickmanGroup.removeStickmans();
+    this.wallGroup.removeWalls();
+    this.slotController.removeSlots();
+    this.busGroup.removeBuses();
+    this.uiController.showBanner();
+    this._activatedMap = [];
 
-    if (firstLoad) {
-      mapData = mapObject["phase_1"];
-    } else {
-      mapData = mapObject["phase_2"];
-    }
+    const mapObject = JSON.parse(this.map);
+    const mapData = mapObject["phase_2"];
+    const { width, height, time, buses, stickmans, slots } = mapData;
+    this._limitedTime = time;
+    this.slotController.spawnSlots(slots);
+    this._activatedMap = this.stickmanGroup.spawnStickmans(
+      width,
+      height,
+      stickmans,
+      this.stickmanMtl
+    );
+    this.busGroup.spawnBuses(buses, this.stickmanMtl);
+    this.wallGroup.spawnWalls(width, height, stickmans);
+    this._isShowedCard = false;
+  }
+
+  loadMap() {
+    const mapObject = JSON.parse(this.map);
+    let mapData = mapObject["phase_1"];
 
     const { width, height, time, buses, stickmans, slots } = mapData;
     this._limitedTime = time;
@@ -146,7 +198,8 @@ export class GameController extends Component {
   }
 
   onTouchStart(event: EventTouch) {
-    this._nonInteractTime = 0;
+    this.uiController.hideCallToPlay();
+    this.deactivateTutorial();
 
     if (this._isGameOver) {
       return;
@@ -156,7 +209,6 @@ export class GameController extends Component {
       return;
     }
     this._startCounting = true;
-    this.deactivateTutorial();
     this.cameraComponent.screenPointToRay(
       event.getLocationX(),
       event.getLocationY(),
@@ -319,7 +371,6 @@ export class GameController extends Component {
 
   playPickStickmanAudio(isRightMove: boolean, stickman: Node) {
     if (isRightMove) {
-      // this.audioController.playTapSfx();
       this.audioController.playYeahSfx();
       if (
         this.busGroup.getCurrentBusColor() ===
@@ -334,6 +385,7 @@ export class GameController extends Component {
       }
     } else {
       this.audioController.playUhohSfx();
+      stickman.getComponent(StickmanController).popWrongEmoji();
     }
   }
 
@@ -343,15 +395,15 @@ export class GameController extends Component {
     });
   }
 
-  updateWarnField() {
-    const windowSize = screen.windowSize;
-    const pixelRatio = screen.devicePixelRatio;
+  // updateWarnField() {
+  //   const windowSize = screen.windowSize;
+  //   const pixelRatio = screen.devicePixelRatio;
 
-    const realWidth = windowSize.width / pixelRatio;
-    const realHeight = windowSize.height / pixelRatio;
+  // const realWidth = windowSize.width / pixelRatio;
+  // const realHeight = windowSize.height / pixelRatio;
 
-    // this.uiController.updateWarnField(realWidth, realHeight);
-  }
+  // this.uiController.updateWarnField(realWidth, realHeight);
+  // }
 
   checkGameOverCondition(): boolean {
     if (this.busGroup.movingBus) {
@@ -377,10 +429,15 @@ export class GameController extends Component {
   }
 
   gameOver(isWin: boolean) {
+    this.uiController.hideBanner();
     this._isGameOver = true;
     playableHelper.gameEnd();
     this.uiController.showEndCard(isWin);
-    this.audioController.playLoseSfx();
+    if (isWin) {
+      this.audioController.playWinSfx();
+    } else {
+      this.audioController.playLoseSfx();
+    }
 
     input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -388,8 +445,17 @@ export class GameController extends Component {
 
   deactivateTutorial() {
     this._playedTut = false;
-    this.uiController.hideTutorial();
+    this._nonInteractTime = 0;
+    this._toShowChallengeTextTime = 0;
+    this._playedChallengeText = false;
     this.stickmanGroup.hideTutHand();
+    this.uiController.hideChallengeText();
+  }
+
+  activateWinPhase1() {
+    this.particleSystem.play();
+    this.audioController.playWinPhaseSfx();
+    this.uiController.showLevelCompletedCard();
   }
 
   download() {

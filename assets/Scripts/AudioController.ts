@@ -4,7 +4,7 @@ const { ccclass, property } = _decorator;
 @ccclass("AudioController")
 export class AudioController extends Component {
   @property(AudioSource)
-  public tapSfx: AudioSource = null!;
+  public popSfx: AudioSource = null!;
 
   @property(AudioSource)
   public bgMusic: AudioSource = null!;
@@ -27,12 +27,29 @@ export class AudioController extends Component {
   @property(AudioSource)
   public loseSfx: AudioSource = null!;
 
+  @property(AudioSource)
+  public winSfx: AudioSource = null!;
+
+  @property(AudioSource)
+  public winPhaseSfx: AudioSource = null!;
+
   start() {}
 
   update(deltaTime: number) {}
 
-  playTapSfx() {
-    this.tapSfx.playOneShot(this.tapSfx.clip, this.tapSfx.volume);
+  playPopSfx() {
+    this.popSfx.playOneShot(this.popSfx.clip, this.popSfx.volume);
+  }
+
+  playWinPhaseSfx() {
+    this.winPhaseSfx.playOneShot(
+      this.winPhaseSfx.clip,
+      this.winPhaseSfx.volume
+    );
+  }
+
+  playWinSfx() {
+    this.winSfx.playOneShot(this.winSfx.clip, this.winSfx.volume);
   }
 
   playLoseSfx() {

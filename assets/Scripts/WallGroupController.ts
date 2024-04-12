@@ -97,80 +97,6 @@ export class WallGroupController extends Component {
     return result;
   }
 
-  // getWallType(
-  //   x: number,
-  //   y: number,
-  //   stickmanMap: number[][]
-  // ): Record<string, WALL_TYPE> {
-  //   let wallTypes: Record<string, WALL_TYPE> = {
-  //     topLeft: WALL_TYPE.WALL_BRICK,
-  //     topRight: WALL_TYPE.WALL_BRICK,
-  //     bottomRight: WALL_TYPE.WALL_BRICK,
-  //     bottomLeft: WALL_TYPE.WALL_BRICK,
-  //   };
-
-  //   const left = new Vec2(x - 1, y);
-  //   const top = new Vec2(x, y - 1);
-  //   const right = new Vec2(x + 1, y);
-  //   const bottom = new Vec2(x, y + 1);
-  //   const topRight = new Vec2(x + 1, y - 1);
-  //   const topLeft = new Vec2(x - 1, y - 1);
-  //   const bottomRight = new Vec2(x + 1, y + 1);
-  //   const bottomLeft = new Vec2(x - 1, y + 1);
-
-  //   Object.keys(wallTypes).forEach((type) => {
-  //     switch (type) {
-  //       case "topLeft": {
-  //         // Top Left
-  //         if (
-  //           stickmanMap[top.x][top.y] === -1 &&
-  //           stickmanMap[left.x][left.y] === -1 &&
-  //           stickmanMap[topLeft.x][topLeft.y] === -1
-  //         ) {
-  //           wallTypes[type] = WALL_TYPE.WALL_BRICK;
-  //         } else if (
-  //           stickmanMap[top.x][top.y] === -1 &&
-  //           stickmanMap[left.x][left.y] === -1 &&
-  //           stickmanMap[topLeft.x][topLeft.y] !== -1
-  //         ) {
-  //           wallTypes[type] = WALL_TYPE.CORNER_OUT;
-  //         } else if (
-  //           stickmanMap[top.x][top.y] === -1 &&
-  //           stickmanMap[left.x][left.y] !== -1 &&
-  //           stickmanMap[topLeft.x][topLeft.y] === -1
-  //         ) {
-  //           wallTypes[type] = WALL_TYPE.EDGE_BRICK;
-  //         } else if (
-  //           stickmanMap[top.x][top.y] !== -1 &&
-  //           stickmanMap[left.x][left.y] === -1 &&
-  //           stickmanMap[topLeft.x][topLeft.y] === -1
-  //         ) {
-  //         } else if (
-  //           stickmanMap[top.x][top.y] === -1 &&
-  //           stickmanMap[left.x][left.y] !== -1 &&
-  //           stickmanMap[topLeft.x][topLeft.y] !== -1
-  //         ) {
-  //         }
-  //         break;
-  //       }
-  //       case "topRight": {
-  //         // Top Right
-  //         break;
-  //       }
-  //       case "bottomRight": {
-  //         // Bottom Right
-  //         break;
-  //       }
-  //       case "bottomLeft": {
-  //         // Bottom Left
-  //         break;
-  //       }
-  //     }
-  //   });
-
-  //   return wallTypes;
-  // }
-
   spawnOutsideWalls(width: number, height: number, stickmanMap: number[][]) {
     this.spawnEdge(width, height, stickmanMap);
   }
@@ -214,7 +140,11 @@ export class WallGroupController extends Component {
             const wallNode = instantiate(wallPrefab);
             wallNode.setRotationFromEuler(0, -90, 0);
             this.node.addChild(wallNode);
-            const position = new Vec3(x + 1, 0, y);
+            let position = new Vec3(x + 1, 0, y);
+
+            if (x === width - 1 && y === 1) {
+              // position=new Vec3(x + 0.9, )
+            }
             wallNode.setPosition(position.subtract(this._toOriginVector));
           } else {
             const wallPrefab =
@@ -316,5 +246,9 @@ export class WallGroupController extends Component {
     wallNode.setPosition(
       position.subtract(this._toOriginVector).add(subtractToOriginVec)
     );
+  }
+
+  removeWalls() {
+    this.node.removeAllChildren();
   }
 }

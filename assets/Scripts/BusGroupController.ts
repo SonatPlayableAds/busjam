@@ -1,5 +1,6 @@
 import {
   _decorator,
+  CCBoolean,
   Component,
   instantiate,
   Material,
@@ -28,6 +29,9 @@ export class BusGroupController extends Component {
   @property([Node])
   public buses: Node[] = [];
 
+  @property(CCBoolean)
+  public winRound = false;
+
   public movingBus: boolean = false;
 
   private _currentBus: Node;
@@ -46,6 +50,10 @@ export class BusGroupController extends Component {
       this.buses.shift();
       this._currentBus = this.buses[0];
 
+      if (this._currentBus === undefined) {
+        this.winRound = true;
+      }
+
       const gameController = this.node.parent
         .getChildByName("GameController")
         .getComponent(GameController);
@@ -55,6 +63,8 @@ export class BusGroupController extends Component {
   }
 
   spawnBuses(buses: number[], busMaterials: Material[]) {
+    this.movingBus = false;
+
     buses.forEach((bus, index) => {
       const busPos = new Vec3(-index * BUS_DISTANCE, 0, 0);
       const busMapIndex = bus - 1;
@@ -86,7 +96,9 @@ export class BusGroupController extends Component {
   }
 
   onStickmanEnterBus(stickman: Node) {
-    this._currentBus.getComponent(BusController).onStickmanEnter(stickman);
+    this._currentBus
+      .getComponent(BusController)
+      .onStickmanEnter(stickman, this.audioController);
   }
 
   updateCurrentBusSeats() {
@@ -124,5 +136,25 @@ export class BusGroupController extends Component {
 
   pushStickmanFromQueueToBus(stickmans: Node[]) {
     this._currentBus.getComponent(BusController).pushStickmanToBus(stickmans);
+  }
+
+  removeBuses() {
+    this.buses.forEach((bus) => {
+      bus.removeFromParent();
+      bus.destroy();
+    });
+
+    this.winRound = false;
+    this.buses = [];
+  }
+
+  checkWinPhaseCondition() {
+    const isWin =
+      this.buses.length === 1 &&
+      this._currentBus
+        .getComponent(BusController)
+        .getNumberOfStickmanOnBus() === 3;
+
+    return isWin;
   }
 }

@@ -23,21 +23,31 @@ export class UIController extends Component {
   public loseEndCard: Node = null!;
 
   @property(Node)
-  public tutorial: Node = null!;
-
-  @property(Node)
   public praseText: Node = null!;
 
   @property(Node)
   public levelCompletedCard: Node = null!;
 
+  @property(Node)
+  public challengeText: Node = null!;
+
+  @property(Node)
+  public callToPlayText: Node = null!;
+
+  @property(Node)
+  public banner: Node = null!;
+
   private _isHideTutorial = false;
 
   start() {
     this.endCardWrapper.scale = new Vec3(0, 0, 0);
+    this.levelCompletedCard.scale = new Vec3(0, 0, 0);
     this.loseEndCard.active = false;
     this.winEndCard.active = false;
-    this.levelCompletedCard.active = false;
+    // this.levelCompletedCard.active = false;
+
+    this.callToPlayText.active = false;
+    this.challengeText.active = false;
   }
 
   update(deltaTime: number) {}
@@ -67,11 +77,11 @@ export class UIController extends Component {
   //   anim.play("warn");
   // }
 
-  hideTutorial() {
-    if (this._isHideTutorial) return;
-    this.tutorial.active = false;
-    this._isHideTutorial = true;
-  }
+  // hideTutorial() {
+  //   if (this._isHideTutorial) return;
+  //   // this.callToPlayText.active = false;
+  //   this._isHideTutorial = true;
+  // }
 
   showEndCard(isWin: boolean) {
     if (isWin) {
@@ -85,5 +95,42 @@ export class UIController extends Component {
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
       .union()
       .start();
+  }
+
+  showLevelCompletedCard() {
+    tween(this.levelCompletedCard)
+      // .delay(0.5)
+      .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
+      .union()
+      .start();
+  }
+
+  hideLevelCompletedCard() {
+    this.levelCompletedCard.active = false;
+  }
+
+  showChallengeText() {
+    this.challengeText.active = true;
+  }
+
+  hideChallengeText() {
+    this.challengeText.active = false;
+    this.callToPlayText.active = false;
+  }
+
+  showCallToPlay() {
+    this.callToPlayText.active = true;
+  }
+
+  hideCallToPlay() {
+    this.callToPlayText.active = false;
+  }
+
+  hideBanner() {
+    this.banner.active = false;
+  }
+
+  showBanner() {
+    this.banner.active = true;
   }
 }
