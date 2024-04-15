@@ -15,6 +15,7 @@ import {
   Vec3,
 } from "cc";
 import { BUS_SEAT } from "./helper/Constants";
+import { StickmanController } from "./StickmanController";
 const { ccclass, property } = _decorator;
 
 @ccclass("BusController")

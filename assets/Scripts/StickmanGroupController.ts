@@ -236,6 +236,21 @@ export class StickmanGroupController extends Component {
     return null;
   }
 
+  activateStickmansStroke(activatedMap: number[][], strokeMtl: Material[]) {
+    this.stickmans.forEach((stickman) => {
+      const stickmanController = stickman.getComponent(StickmanController);
+      const validPath = stickmanController.findShortestPath(activatedMap);
+
+      if (validPath === undefined || validPath.length === 0) {
+        return;
+      } else {
+        stickmanController.applyMtl(
+          strokeMtl[PLAYER_COLOR[stickmanController.stickmanColor]]
+        );
+      }
+    });
+  }
+
   hideTutHand() {
     this.tutHand.active = false;
   }

@@ -91,7 +91,7 @@ export class UIController extends Component {
     }
 
     tween(this.endCardWrapper)
-      // .delay(0.5)
+      .delay(0.5)
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
       .union()
       .start();
@@ -99,7 +99,7 @@ export class UIController extends Component {
 
   showLevelCompletedCard() {
     tween(this.levelCompletedCard)
-      // .delay(0.5)
+      .delay(0.5)
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
       .union()
       .start();
@@ -128,6 +128,11 @@ export class UIController extends Component {
 
   hideBanner() {
     this.banner.active = false;
+  }
+
+  resizeBanner() {
+    const bannerBtn = this.banner.getChildByName("banner-btn");
+    const gameName = this.banner.getChildByName("game-name");
   }
 
   showBanner() {

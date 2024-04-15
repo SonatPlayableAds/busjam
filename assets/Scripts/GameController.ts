@@ -61,6 +61,9 @@ export class GameController extends Component {
   public stickmanMtl: Material[] = [];
 
   @property([Material])
+  public stickmanStrokeMtl: Material[] = [];
+
+  @property([Material])
   public busMtl: Material[] = [];
 
   private _activatedMap: number[][] = [[]];
@@ -86,11 +89,14 @@ export class GameController extends Component {
 
     playableHelper.setStoreUrl(iosUrl, androidUrl);
 
-    // this.updateWarnField();
     this.uiController.showCallToPlay();
 
     this.loadMap();
     this.stickmanGroup.playTut(this._activatedMap);
+    this.stickmanGroup.activateStickmansStroke(
+      this._activatedMap,
+      this.stickmanStrokeMtl
+    );
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -175,6 +181,10 @@ export class GameController extends Component {
     );
     this.busGroup.spawnBuses(buses, this.stickmanMtl);
     this.wallGroup.spawnWalls(width, height, stickmans);
+    this.stickmanGroup.activateStickmansStroke(
+      this._activatedMap,
+      this.stickmanStrokeMtl
+    );
     this._isShowedCard = false;
   }
 
@@ -253,6 +263,11 @@ export class GameController extends Component {
             this.slotController.availableSlots[availableSlotIndex] = false;
             this._queueStickman.push(toQueueStickman);
           }
+
+          this.stickmanGroup.activateStickmansStroke(
+            this._activatedMap,
+            this.stickmanStrokeMtl
+          );
         }
       }
     }

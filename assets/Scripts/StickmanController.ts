@@ -7,6 +7,7 @@ import {
   easing,
   Material,
   Node,
+  ParticleSystem,
   Quat,
   SkinnedMeshRenderer,
   Texture2D,
@@ -39,6 +40,9 @@ export class StickmanController extends Component {
 
   @property(Node)
   public hatedEmoji: Node = null!;
+
+  @property(ParticleSystem)
+  public glow: ParticleSystem = null!;
 
   public slotIndex: number = -1;
   public doNothing = true;
@@ -199,7 +203,6 @@ export class StickmanController extends Component {
             position: endPoint,
           },
           {
-            easing: "sineIn",
             onComplete: () => {
               // this._animationController.setValue("Running", false);
             },
@@ -229,13 +232,9 @@ export class StickmanController extends Component {
     this._animationController.setValue("Running", true);
 
     const fromQueueToBusTween = tween(this.node)
-      .to(
-        0.5,
-        {
-          position: busDestination,
-        },
-        { easing: "sineIn" }
-      )
+      .to(0.5, {
+        position: busDestination,
+      })
       .to(
         0.2,
         { scale: new Vec3(0.036, 0.036, 0.036) },

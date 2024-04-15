@@ -63,13 +63,36 @@
   "_props": [
     {},
     {
-      "specular": {
+      "mainColor": {
         "__type__": "cc.Color",
         "r": 255,
         "g": 255,
         "b": 255,
-        "a": 0
+        "a": 255
       },
+      "shadeColor1": {
+        "__type__": "cc.Color",
+        "r": 207,
+        "g": 207,
+        "b": 207,
+        "a": 255
+      },
+      "shadeColor2": {
+        "__type__": "cc.Color",
+        "r": 207,
+        "g": 207,
+        "b": 207,
+        "a": 255
+      },
+      "specular": {
+        "__type__": "cc.Color",
+        "r": 80,
+        "g": 80,
+        "b": 80,
+        "a": 114
+      },
+      "baseStep": 0.949,
+      "baseFeather": 0.162,
       "mainTexture": {
         "__uuid__": "bd8ea488-47d1-40b6-bf30-2fa1c8db4af2@6c48a",
         "__expectedType__": "cc.Texture2D"
