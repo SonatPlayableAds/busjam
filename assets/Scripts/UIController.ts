@@ -99,7 +99,7 @@ export class UIController extends Component {
 
   showLevelCompletedCard() {
     tween(this.levelCompletedCard)
-      .delay(0.5)
+      .delay(0.2)
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })
       .union()
       .start();

@@ -449,6 +449,7 @@ export class GameController extends Component {
     playableHelper.gameEnd();
     this.uiController.showEndCard(isWin);
     if (isWin) {
+      this.particleSystem.play();
       this.audioController.playWinSfx();
     } else {
       this.audioController.playLoseSfx();
