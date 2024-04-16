@@ -208,7 +208,7 @@ export class StickmanGroupController extends Component {
     if (canPickStickman) {
       const stickmanPos = canPickStickman.node.position;
       this.tutHand.setPosition(
-        new Vec3(stickmanPos.x + 0.7, 0, stickmanPos.z + 1.1)
+        new Vec3(stickmanPos.x + 0.7, 0, stickmanPos.z + 2)
       );
       this.tutHand.active = true;
     }
