@@ -44,19 +44,13 @@ export class UIController extends Component {
     this.levelCompletedCard.scale = new Vec3(0, 0, 0);
     this.loseEndCard.active = false;
     this.winEndCard.active = false;
-    // this.levelCompletedCard.active = false;
+    this.levelCompletedCard.active = false;
 
     this.callToPlayText.active = false;
     this.challengeText.active = false;
   }
 
   update(deltaTime: number) {}
-
-  // updateCounter(time: number) {
-  //   const timeInString = `00:${time < 10 ? `0${time}` : time}`;
-
-  //   this.timeCounterLabel.getComponent(Label).string = timeInString;
-  // }
 
   popPraiseText() {
     const praiseTexts = ["Great!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
@@ -71,17 +65,6 @@ export class UIController extends Component {
       .union()
       .start();
   }
-
-  // playWarning() {
-  //   const anim = this.warn.getComponent(Animation);
-  //   anim.play("warn");
-  // }
-
-  // hideTutorial() {
-  //   if (this._isHideTutorial) return;
-  //   // this.callToPlayText.active = false;
-  //   this._isHideTutorial = true;
-  // }
 
   showEndCard(isWin: boolean) {
     if (isWin) {

@@ -159,6 +159,7 @@ export class GameController extends Component {
   }
 
   loadPhase2() {
+    console.log('load phase 2')
     this._phase = 2;
     this.uiController.hideLevelCompletedCard();
     this.stickmanGroup.removeStickmans();
@@ -447,6 +448,7 @@ export class GameController extends Component {
     this.uiController.hideBanner();
     this._isGameOver = true;
     playableHelper.gameEnd();
+    console.log("game over")
     this.uiController.showEndCard(isWin);
     if (isWin) {
       this.particleSystem.play();
