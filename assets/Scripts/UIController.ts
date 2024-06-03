@@ -9,6 +9,7 @@ import {
   Animation,
   UITransform,
 } from "cc";
+import { GameParamsController } from "./GameParamsController";
 const { ccclass, property } = _decorator;
 
 @ccclass("UIController")
@@ -37,14 +38,20 @@ export class UIController extends Component {
   @property(Node)
   public banner: Node = null!;
 
+  @property(GameParamsController)
+  public gameParams: GameParamsController = null!;
+
   private _isHideTutorial = false;
+  private _praiseTexts = []
 
   start() {
     this.endCardWrapper.scale = new Vec3(0, 0, 0);
     this.levelCompletedCard.scale = new Vec3(0, 0, 0);
     this.loseEndCard.active = false;
     this.winEndCard.active = false;
-    this.levelCompletedCard.active = false;
+    // this.levelCompletedCard.active = false;
+
+    this._praiseTexts = this.gameParams.gameVars.praiseTexts;
 
     this.callToPlayText.active = false;
     this.challengeText.active = false;
@@ -53,9 +60,9 @@ export class UIController extends Component {
   update(deltaTime: number) {}
 
   popPraiseText() {
-    const praiseTexts = ["Great!", "Cool!", "Amazing!", "Nice!", "Perfect!"];
-    const randomIndex = Math.floor(Math.random() * praiseTexts.length);
-    const text = praiseTexts[randomIndex];
+
+    const randomIndex = Math.floor(Math.random() * this._praiseTexts.length);
+    const text = this._praiseTexts[randomIndex];
 
     this.praseText.getComponent(Label).string = text;
     tween(this.praseText)
@@ -81,6 +88,7 @@ export class UIController extends Component {
   }
 
   showLevelCompletedCard() {
+    this.levelCompletedCard.active = true;
     tween(this.levelCompletedCard)
       .delay(0.2)
       .to(0.8, { scale: new Vec3(1, 1, 1) }, { easing: "backOut" })

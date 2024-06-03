@@ -26,18 +26,19 @@ import { NODE_NAME } from "./helper/Constants";
 import { UIController } from "./UIController";
 import { StickmanController } from "./StickmanController";
 import playableHelper from "./helper/PlayableHelper";
+import { GameParamsController } from "./GameParamsController";
 const { ccclass, property } = _decorator;
 
 @ccclass("GameController")
 export class GameController extends Component {
-  @property({ type: ParticleSystem })
-  public particleSystem: ParticleSystem = null!;
+  @property([ParticleSystem])
+  public particleSystems: ParticleSystem[] = [];
+
+  @property(GameParamsController)
+  public gameParams: GameParamsController = null!;
 
   @property({ type: Camera })
   public cameraComponent: Camera = null!;
-
-  @property(CCString)
-  public map: string = "";
 
   @property(UIController)
   public uiController: UIController = null!;
@@ -88,15 +89,16 @@ export class GameController extends Component {
       "https://apps.apple.com/ae/app/bus-escape-3d-jam-puzzle/id6480099401";
 
     playableHelper.setStoreUrl(iosUrl, androidUrl);
+    playableHelper.gameStart();
 
     this.uiController.showCallToPlay();
 
     this.loadMap();
     this.stickmanGroup.playTut(this._activatedMap);
-    this.stickmanGroup.activateStickmansStroke(
-      this._activatedMap,
-      this.stickmanStrokeMtl
-    );
+    // this.stickmanGroup.activateStickmansStroke(
+    //   this._activatedMap,
+    //   this.stickmanStrokeMtl
+    // );
 
     input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
     input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -110,8 +112,11 @@ export class GameController extends Component {
     if (this._startCounting && !this._isGameOver) {
       this.slotToBus();
       if (this.busGroup.winRound && !this._isShowedCard) {
-        if (this._phase === 1) {
-          this.activateWinPhase1();
+        if (
+          this.gameParams.gameVars.currentLevel <
+          this.gameParams.gameVars.levels.length - 1
+        ) {
+          this.activateWinLevel();
           this.uiController.hideBanner();
           this._isShowedCard = true;
         } else {
@@ -158,9 +163,7 @@ export class GameController extends Component {
     }
   }
 
-  loadPhase2() {
-    console.log('load phase 2')
-    this._phase = 2;
+  loadMap() {
     this.uiController.hideLevelCompletedCard();
     this.stickmanGroup.removeStickmans();
     this.wallGroup.removeWalls();
@@ -169,8 +172,8 @@ export class GameController extends Component {
     this.uiController.showBanner();
     this._activatedMap = [];
 
-    const mapObject = JSON.parse(this.map);
-    const mapData = mapObject["phase_2"];
+    const mapData =
+      this.gameParams.gameVars.levels[this.gameParams.gameVars.currentLevel];
     const { width, height, time, buses, stickmans, slots } = mapData;
     this._limitedTime = time;
     this.slotController.spawnSlots(slots);
@@ -189,24 +192,24 @@ export class GameController extends Component {
     this._isShowedCard = false;
   }
 
-  loadMap() {
-    const mapObject = JSON.parse(this.map);
-    let mapData = mapObject["phase_1"];
+  // loadMap() {
+  //   const mapObject = JSON.parse(this.map);
+  //   let mapData = mapObject["phase_1"];
 
-    const { width, height, time, buses, stickmans, slots } = mapData;
-    this._limitedTime = time;
+  //   const { width, height, time, buses, stickmans, slots } = mapData;
+  //   this._limitedTime = time;
 
-    this.slotController.spawnSlots(slots);
-    this._activatedMap = this.stickmanGroup.spawnStickmans(
-      width,
-      height,
-      stickmans,
-      this.stickmanMtl
-    );
-    this.busGroup.spawnBuses(buses, this.stickmanMtl);
-    this.wallGroup.spawnWalls(width, height, stickmans);
-    playableHelper.gameStart();
-  }
+  //   this.slotController.spawnSlots(slots);
+  //   this._activatedMap = this.stickmanGroup.spawnStickmans(
+  //     width,
+  //     height,
+  //     stickmans,
+  //     this.stickmanMtl
+  //   );
+  //   this.busGroup.spawnBuses(buses, this.stickmanMtl);
+  //   this.wallGroup.spawnWalls(width, height, stickmans);
+  //   playableHelper.gameStart();
+  // }
 
   onTouchStart(event: EventTouch) {
     this.uiController.hideCallToPlay();
@@ -215,10 +218,12 @@ export class GameController extends Component {
     if (this._isGameOver) {
       return;
     }
+
     if (!this.slotController.hasEmptySlot()) {
       this.audioController.playUhohSfx();
       return;
     }
+
     this._startCounting = true;
     this.cameraComponent.screenPointToRay(
       event.getLocationX(),
@@ -448,10 +453,10 @@ export class GameController extends Component {
     this.uiController.hideBanner();
     this._isGameOver = true;
     playableHelper.gameEnd();
-    console.log("game over")
     this.uiController.showEndCard(isWin);
+    
     if (isWin) {
-      this.particleSystem.play();
+      this.playFireworks();
       this.audioController.playWinSfx();
     } else {
       this.audioController.playLoseSfx();
@@ -470,10 +475,17 @@ export class GameController extends Component {
     this.uiController.hideChallengeText();
   }
 
-  activateWinPhase1() {
-    this.particleSystem.play();
+  activateWinLevel() {
+    this.gameParams.gameVars.currentLevel++;
+    this.playFireworks();
     this.audioController.playWinPhaseSfx();
     this.uiController.showLevelCompletedCard();
+  }
+
+  playFireworks() {
+    this.particleSystems.forEach((particleSystem) => {
+      particleSystem.play();
+    });
   }
 
   download() {
