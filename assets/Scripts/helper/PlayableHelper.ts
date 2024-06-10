@@ -11,8 +11,6 @@ class H5Playable {
    * Game start method for Mintegral channel.
    */
   gameStart() {
-    console.log("download")
-
     //@ts-ignore
     if (typeof onGameReady !== "undefined") onGameReady();
     console.log("start game")

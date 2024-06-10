@@ -15,6 +15,7 @@ enum WALL_TYPE {
   CORNER_OUT,
   U_CORNER,
   CIRCLE,
+  EDGE_BRICK_1_SIDE
 }
 
 @ccclass("WallGroupController")
@@ -95,6 +96,22 @@ export class WallGroupController extends Component {
       }
     } else if (wall === -12) {
       result.type = WALL_TYPE.WALL_BRICK;
+    } else if (wall <= -13 && wall >= -16) {
+      result.type = WALL_TYPE.EDGE_BRICK_1_SIDE;
+      switch (wall) {
+        case -13:
+          result.rotation = 0;
+          break;
+        case -14:
+            result.rotation = -90;
+            break;
+        case -15:
+          result.rotation = 180;
+          break;
+        case -16:
+          result.rotation = 90;
+          break;
+      }
     }
 
     return result;

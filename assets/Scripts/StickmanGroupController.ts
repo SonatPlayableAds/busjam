@@ -233,7 +233,7 @@ export class StickmanGroupController extends Component {
       }
     }
 
-    return null;
+    return this.stickmans[0].getComponent(StickmanController);
   }
 
   activateStickmansStroke(activatedMap: number[][], strokeMtl: Material[]) {
