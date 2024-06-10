@@ -4271,7 +4271,7 @@
       "__id__": 268
     },
     "duration": 1,
-    "loop": false,
+    "loop": true,
     "simulationSpeed": 1,
     "playOnAwake": false,
     "gravityModifier": {
@@ -4325,7 +4325,7 @@
       "__id__": 309
     },
     "_prewarm": false,
-    "_capacity": 3,
+    "_capacity": 100,
     "_simulationSpace": 0,
     "_id": ""
   },
@@ -4848,6 +4848,11 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 311
+    },
+    "matrixPos": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
     },
     "stickmanColor": "",
     "hatedEmoji": {
