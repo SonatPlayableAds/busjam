@@ -41,8 +41,8 @@ export class StickmanController extends Component {
   @property(Node)
   public hatedEmoji: Node = null!;
 
-  @property(ParticleSystem)
-  public glow: ParticleSystem = null!;
+  @property([ParticleSystem])
+  public particles: ParticleSystem[] = [];
 
   public slotIndex: number = -1;
   public doNothing = true;
@@ -302,6 +302,12 @@ export class StickmanController extends Component {
       )
       .union()
       .start();
+  }
+
+  playParticle() {
+    this.particles.forEach((particle) => {
+      particle.play();
+    });
   }
 
   cheer() {

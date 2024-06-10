@@ -124,19 +124,12 @@ export class GameController extends Component {
         }
       }
 
-      // this.uiController.updateCounter(timer);
-
-      // if (timer <= 10 && !this._playedAlarm) {
-      // this._playedAlarm = true;
-      // this.audioController.playAlarmSfx();
-      // this.uiController.playWarning();
-      // }
-
       if (!this._isShowedCard) {
         this._nonInteractTime += deltaTime;
         this._toShowChallengeTextTime += deltaTime;
         this._limitedTime -= deltaTime;
         const timer = Math.round(this._limitedTime);
+        this.uiController.updateTimer(timer);
 
         if (timer <= 0) {
           this._startCounting = false;
@@ -144,7 +137,7 @@ export class GameController extends Component {
         }
 
         if (
-          this._nonInteractTime >= 0.5 &&
+          this._nonInteractTime >= this.gameParams.gameVars.playTutAgainTime &&
           !this._playedTut &&
           !this.busGroup.movingBus
         ) {
@@ -171,10 +164,11 @@ export class GameController extends Component {
     this.busGroup.removeBuses();
     this.uiController.showBanner();
     this._activatedMap = [];
-
+    
     const mapData =
-      this.gameParams.gameVars.levels[this.gameParams.gameVars.currentLevel];
+    this.gameParams.gameVars.levels[this.gameParams.gameVars.currentLevel];
     const { width, height, time, buses, stickmans, slots } = mapData;
+    this.uiController.updateTimer(time);
     this._limitedTime = time;
     this.slotController.spawnSlots(slots);
     this._activatedMap = this.stickmanGroup.spawnStickmans(

@@ -14,6 +14,7 @@ enum WALL_TYPE {
   EDGE_BRICK,
   CORNER_OUT,
   U_CORNER,
+  CIRCLE,
 }
 
 @ccclass("WallGroupController")
@@ -57,7 +58,9 @@ export class WallGroupController extends Component {
   getWallType(wall: number): { type: WALL_TYPE; rotation: number } {
     const result = { type: WALL_TYPE.WALL_BRICK, rotation: 0 };
 
-    if (wall < -1 && wall >= -5) {
+    if (wall === -1) {
+      result.type = WALL_TYPE.CIRCLE;
+    } else if (wall < -1 && wall >= -5) {
       result.type = WALL_TYPE.CORNER_OUT;
       switch (wall) {
         case -2:

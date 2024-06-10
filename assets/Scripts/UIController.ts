@@ -41,6 +41,9 @@ export class UIController extends Component {
   @property(GameParamsController)
   public gameParams: GameParamsController = null!;
 
+  @property(Node)
+  public timer: Node = null!
+
   private _isHideTutorial = false;
   private _praiseTexts = []
 
@@ -58,9 +61,13 @@ export class UIController extends Component {
   }
 
   update(deltaTime: number) {}
+  
+  updateTimer(time: number) {
+    const timerLabel = this.timer.getComponent(Label);
+    timerLabel.string = `00:${time >= 10 ? time : `0${time}`}`;
+  }
 
   popPraiseText() {
-
     const randomIndex = Math.floor(Math.random() * this._praiseTexts.length);
     const text = this._praiseTexts[randomIndex];
 

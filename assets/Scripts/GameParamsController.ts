@@ -5,6 +5,7 @@ interface GameVariables {
   camera: {
     zoom: number;
   };
+  playTutAgainTime: number
   praiseTexts: string[];
   currentLevel: number;
   levels: {time: number, slots: number, width: number, height: number, stickmans: number[][], buses: number[]}[];
