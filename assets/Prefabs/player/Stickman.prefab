@@ -4849,11 +4849,6 @@
     "__prefab": {
       "__id__": 311
     },
-    "matrixPos": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
     "stickmanColor": "",
     "hatedEmoji": {
       "__id__": 67
@@ -4870,7 +4865,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "d14+08TY1J/JV0o3uyqzS8"
+    "fileId": "04q7WPOD5MFp5VMOOJymV7"
   },
   {
     "__type__": "cc.PrefabInfo",
