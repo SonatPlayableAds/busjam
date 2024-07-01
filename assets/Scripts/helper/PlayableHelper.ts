@@ -1,5 +1,6 @@
 class H5Playable {
   redirect() {
+    console.log("download")
     //@ts-ignore
     window.super_html && super_html.download();
 
